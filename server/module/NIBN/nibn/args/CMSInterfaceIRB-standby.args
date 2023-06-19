@@ -1,0 +1,8 @@
+vlan,vrf,str(ipaddress.ip_network(network, strict=False))
+vlan,str(ipaddress.ip_network(network, strict=False)[3]) + "/" + str(ipaddress.ip_network(network, strict=False).prefixlen),str(ipaddress.ip_network(network, strict=False)[2])
+vlan,str(ipaddress.ip_network(network, strict=False)[3]) + "/" + str(ipaddress.ip_network(network, strict=False).prefixlen),str(ipaddress.ip_network(network, strict=False)[2])
+vlan,str(ipaddress.ip_network(network, strict=False)[3]) + "/" + str(ipaddress.ip_network(network, strict=False).prefixlen),vlan,str(ipaddress.ip_network(network, strict=False)[1])
+vlan,str(ipaddress.ip_network(network, strict=False)[3]) + "/" + str(ipaddress.ip_network(network, strict=False).prefixlen),vlan
+vlan,str(ipaddress.ip_network(network, strict=False)[3]) + "/" + str(ipaddress.ip_network(network, strict=False).prefixlen),vlan
+vlan,str(ipaddress.ip_network(network, strict=False)[3]) + "/" + str(ipaddress.ip_network(network, strict=False).prefixlen),vlan
+vlan

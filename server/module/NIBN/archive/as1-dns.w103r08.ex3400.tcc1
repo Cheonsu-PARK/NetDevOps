@@ -1,0 +1,333 @@
+set version 21.4R3-S2.4
+set system host-name as1-dns.w103r08.ex3400.tcc1
+set system root-authentication encrypted-password "$5$.xwS9ftc$Gdz4FkXtIB8MmB8LvTOl30xRGQ/QKxfshzm.rVuaft1"
+set system scripts commit file denyconfig.slax
+deactivate system scripts
+set system login class superuser-local idle-timeout 30
+set system login class superuser-local permissions all
+set system login user icraft uid 2004
+set system login user icraft class superuser-local
+set system login user icraft authentication encrypted-password "$5$j/qC4/p5$1FmvIRtNUnhZ/GoIPzT//BWZ7dmq2utqFo..QZf5Iv2"
+set system login user nhninfra uid 2005
+set system login user nhninfra class superuser-local
+set system login user nhninfra authentication encrypted-password "$5$QL727OgA$U3c3tiXLPPeG6..PVWugU4qI45esfwwQWcHWXPe/Ak0"
+set system login user remote full-name Authenticated
+set system login user remote uid 2002
+set system login user remote class superuser-local
+set system login password format sha256
+set system login message "================================================================================\n\n             >>> as1-dns.w103r08.ex3400.tcc1 <<<                                    \n\n! WARNING: Authorized Access Only.\n! This system is the property of NHN .\n! UNAUTHORIZED ACCESS TO THIS DEVICE IS PROHIBITED.\n! You must have explicit permission to access or configure this device.\n! All activities performed on this device may be logged.\n! Any violations of this policy may result in disciplinary action,\n! and may be reported to law enforcement. There is no right to privacy on this\n  device.\n================================================================================;"
+set system services ssh
+set system time-zone Asia/Seoul
+set system arp aging-timer 120
+set system authentication-order tacplus
+set system tacplus-server 10.77.122.200 secret "$9$gg4JD.PQ3nCq.0BEhrlKMW8L7Vbs"
+set system tacplus-server 10.77.122.200 timeout 1
+set system tacplus-server 10.77.122.200 single-connection
+set system tacplus-server 10.77.122.200 source-address 10.60.250.238
+set system accounting events login
+set system accounting events interactive-commands
+set system accounting destination tacplus server 10.77.122.200 secret "$9$K59v87wYoZGibwmfzF/9Apu0OIcSr"
+set system accounting destination tacplus server 10.77.122.200 timeout 1
+set system accounting destination tacplus server 10.77.122.200 single-connection
+set system accounting destination tacplus server 10.77.122.200 source-address 10.60.250.238
+set system syslog archive size 5m
+set system syslog archive files 20
+set system syslog archive world-readable
+set system syslog user * any emergency
+set system syslog user * match "!(.*I-chip 4 invalid - ichip_get_handle.*|.*irb; ifl.*)"
+set system syslog host 10.161.144.35 any any
+set system syslog host 10.161.144.35 match "!(.*I-chip 4 invalid - ichip_get_handle.*|.*irb; ifl.*|Stats bucket for jtree app.*|.*soc_mem_read.*|.*INTERACT-6-UI.*|.*CRON-6.*|.*flag 00000008 not supported.*)"
+set system syslog host 10.161.144.35 explicit-priority
+set system syslog host 10.161.144.40 any any
+set system syslog host 10.161.144.40 match "!(.*I-chip 4 invalid - ichip_get_handle.*|.*irb; ifl.*|Stats bucket for jtree app.*|.*soc_mem_read.*|.*INTERACT-6-UI.*|.*CRON-6.*|.*flag 00000008 not supported.*)"
+set system syslog host 10.161.144.40 explicit-priority
+set system syslog host 10.161.135.25 any info
+set system syslog host 10.161.135.25 authorization info
+set system syslog host 10.161.135.25 match "!(.*I-chip 4 invalid - ichip_get_handle.*|.*irb; ifl.*|Stats bucket for jtree app.*|.*soc_mem_read.*|.*INTERACT-6-UI.*|.*CRON-6.*|.*CHANGE-6-UI_CFG_AUDIT_OTHER.*|.*downward spike.*|.*%NTP-5.*|.*flag 00000008 not supported.*)"
+set system syslog host 10.161.135.25 explicit-priority
+set system syslog file command interactive-commands any
+set system syslog file command archive size 512k
+set system syslog file command archive files 10
+set system syslog file command archive world-readable
+set system syslog file command explicit-priority
+set system syslog file interactive-commands interactive-commands any
+set system syslog file interactive-commands explicit-priority
+set system syslog file messages any info
+set system syslog file messages authorization info
+set system syslog file messages match "!(.*I-chip 4 invalid - ichip_get_handle.*|.*irb; ifl.*|.*soc_mem_read.*|.*INTERACT-6-UI.*|.*CRON-6.*)"
+set system syslog file messages explicit-priority
+set system syslog source-address 10.60.250.238
+set system ddos-protection protocols arp aggregate bandwidth 2000
+set system ntp boot-server 10.60.1.1
+set system ntp server 10.60.1.1 prefer
+set system ntp server 10.60.1.2
+set system ntp source-address 10.60.250.238
+set chassis redundancy graceful-switchover
+set chassis aggregated-devices ethernet device-count 50
+set chassis fpc 0 pic 0 port 48 channel-speed disable-auto-speed-detection
+set chassis fpc 0 pic 0 port 49 channel-speed disable-auto-speed-detection
+set chassis alarm management-ethernet link-down ignore
+set interfaces ge-0/0/0 disable
+set interfaces ge-0/0/1 description "## to infoblox1.w103r07 LAN1(active) front ##"
+set interfaces ge-0/0/1 unit 0 family ethernet-switching interface-mode access
+set interfaces ge-0/0/1 unit 0 family ethernet-switching vlan members 10
+set interfaces ge-0/0/2 description "## to infoblox2.w103r07 LAN2(standby) front ##"
+set interfaces ge-0/0/2 unit 0 family ethernet-switching interface-mode access
+set interfaces ge-0/0/2 unit 0 family ethernet-switching vlan members 10
+set interfaces ge-0/0/3 description "## to infoblox1.w103r07 HA front ##"
+set interfaces ge-0/0/3 unit 0 family ethernet-switching interface-mode access
+set interfaces ge-0/0/3 unit 0 family ethernet-switching vlan members 10
+set interfaces ge-0/0/4 description "## to Grid infoblox1.w103r07 LAN1(active) front ##"
+set interfaces ge-0/0/4 unit 0 family ethernet-switching interface-mode access
+set interfaces ge-0/0/4 unit 0 family ethernet-switching vlan members 11
+set interfaces ge-0/0/5 description "## to Grid infoblox2.w103r08 LAN1(standby) front ##"
+set interfaces ge-0/0/5 unit 0 family ethernet-switching interface-mode access
+set interfaces ge-0/0/5 unit 0 family ethernet-switching vlan members 11
+set interfaces ge-0/0/6 description "## to Grid infoblox1.w103r07 HA front ##"
+set interfaces ge-0/0/6 unit 0 family ethernet-switching interface-mode access
+set interfaces ge-0/0/6 unit 0 family ethernet-switching vlan members 11
+set interfaces ge-0/0/7 description "## to infoblox1.w103r07 MGMT ##"
+set interfaces ge-0/0/7 unit 0 family ethernet-switching interface-mode access
+set interfaces ge-0/0/7 unit 0 family ethernet-switching vlan members 11
+set interfaces ge-0/0/8 disable
+set interfaces ge-0/0/9 disable
+set interfaces ge-0/0/10 disable
+set interfaces ge-0/0/11 disable
+set interfaces ge-0/0/12 disable
+set interfaces ge-0/0/13 disable
+set interfaces ge-0/0/14 disable
+set interfaces ge-0/0/15 disable
+set interfaces ge-0/0/16 disable
+set interfaces ge-0/0/17 disable
+set interfaces ge-0/0/18 disable
+set interfaces ge-0/0/19 disable
+set interfaces ge-0/0/20 disable
+set interfaces ge-0/0/21 disable
+set interfaces ge-0/0/22 disable
+set interfaces ge-0/0/23 disable
+set interfaces ge-0/0/24 disable
+set interfaces ge-0/0/25 disable
+set interfaces ge-0/0/26 disable
+set interfaces ge-0/0/27 disable
+set interfaces ge-0/0/28 disable
+set interfaces ge-0/0/29 disable
+set interfaces ge-0/0/30 disable
+set interfaces ge-0/0/31 disable
+set interfaces ge-0/0/32 disable
+set interfaces ge-0/0/33 disable
+set interfaces ge-0/0/34 disable
+set interfaces ge-0/0/35 disable
+set interfaces ge-0/0/36 disable
+set interfaces ge-0/0/37 disable
+set interfaces ge-0/0/38 disable
+set interfaces ge-0/0/39 disable
+set interfaces ge-0/0/40 disable
+set interfaces ge-0/0/41 disable
+set interfaces ge-0/0/42 disable
+set interfaces ge-0/0/43 disable
+set interfaces ge-0/0/44 description "## to infoblox2.w103r07 ge-0/0/45 interlink ##"
+set interfaces ge-0/0/44 ether-options 802.3ad ae0
+set interfaces ge-0/0/45 description "## to infoblox2.w103r07 ge-0/0/46 interlink ##"
+set interfaces ge-0/0/45 ether-options 802.3ad ae0
+set interfaces ge-0/0/46 description "## to infoblox2.w103r07 ge-0/0/47 interlink ##"
+set interfaces ge-0/0/46 ether-options 802.3ad ae0
+set interfaces ge-0/0/47 description "## to infoblox2.w103r07 ge-0/0/48 interlink ##"
+set interfaces ge-0/0/47 ether-options 802.3ad ae0
+set interfaces xe-0/2/0 description "## to cs1.mx960.tcc1 xe-8/0/0 front ##"
+set interfaces xe-0/2/0 vlan-tagging
+set interfaces xe-0/2/0 unit 1010 description "## to cs1.mx960.tcc1 xe-8/0/0.1010 unit_1010 10.10.5.229 front VR10_v10_infoblox_serivce ##"
+set interfaces xe-0/2/0 unit 1010 vlan-id 1010
+set interfaces xe-0/2/0 unit 1010 family inet address 10.10.5.230/30
+set interfaces xe-0/2/0 unit 1020 description "## to cs1.mx960.tcc1 xe-8/0/0.1020 unit_1020 10.10.5.237 front VR11_v11_infoblox_mgmt ##"
+set interfaces xe-0/2/0 unit 1020 vlan-id 1020
+set interfaces xe-0/2/0 unit 1020 family inet address 10.10.5.238/30
+set interfaces xe-0/2/1 description "## to cs2.mx960.tcc1 xe-8/0/0 front ##"
+set interfaces xe-0/2/1 vlan-tagging
+set interfaces xe-0/2/1 unit 1030 description "## to cs2.mx960.tcc1 xe-8/0/0.1030 unit_1030 10.10.5.213 front VR10_v10_infoblox_serivce ##"
+set interfaces xe-0/2/1 unit 1030 vlan-id 1030
+set interfaces xe-0/2/1 unit 1030 family inet address 10.10.5.214/30
+set interfaces xe-0/2/1 unit 1040 description "## to cs2.mx960.tcc1 xe-8/0/0.1040 unit_1040 10.10.5.221 front VR11_v11_infoblox_mgmt ##"
+set interfaces xe-0/2/1 unit 1040 vlan-id 1040
+set interfaces xe-0/2/1 unit 1040 family inet address 10.10.5.222/30
+set interfaces xe-0/2/2 description "## to ext.cs3-w103r04.q10002-36q.tcc1 xe-0/0/1:2 10.10.42.121 front ##"
+set interfaces xe-0/2/2 unit 0 family inet address 10.10.42.122/30
+set interfaces xe-0/2/3 description "## to ext.cs4-w104r04.q10002-36q.tcc1 xe-0/0/1:2 10.10.42.129 front ##"
+set interfaces xe-0/2/3 unit 0 family inet address 10.10.42.130/30
+set interfaces ae0 description "## to as2-dns.w103r08.ex3400.tcc1 ae0 interlink ##"
+set interfaces ae0 mtu 9216
+set interfaces ae0 aggregated-ether-options lacp active
+set interfaces ae0 aggregated-ether-options lacp periodic slow
+set interfaces ae0 unit 0 family ethernet-switching interface-mode trunk
+set interfaces ae0 unit 0 family ethernet-switching vlan members 3
+set interfaces ae0 unit 0 family ethernet-switching vlan members 10-11
+set interfaces ae0 unit 0 family ethernet-switching storm-control default
+set interfaces irb unit 3 description "## to as2-dns.w103r08.ex3400.tcc1 10.10.42.154 ae0 ##"
+set interfaces irb unit 3 family inet address 10.10.42.153/30
+set interfaces irb unit 3 family inet address 10.10.42.137/30 arp 10.10.42.138 l2-interface ae0.0
+set interfaces irb unit 3 family inet address 10.10.42.137/30 arp 10.10.42.138 mac c8:fe:6a:fc:07:c4
+set interfaces irb unit 10 description "## InfoBlox DNS network 223.255.201.192/26 ##"
+set interfaces irb unit 10 family inet address 223.255.201.252/26 vrrp-group 10 virtual-address 223.255.201.254
+set interfaces irb unit 10 family inet address 223.255.201.252/26 vrrp-group 10 priority 110
+set interfaces irb unit 10 family inet address 223.255.201.252/26 vrrp-group 10 no-preempt
+set interfaces irb unit 10 family inet address 223.255.201.252/26 vrrp-group 10 accept-data
+set interfaces irb unit 11 description "## Grid InfoBlox DNS network 10.163.28.240/28 ##"
+set interfaces irb unit 11 family inet address 10.163.28.252/28 vrrp-group 11 virtual-address 10.163.28.254
+set interfaces irb unit 11 family inet address 10.163.28.252/28 vrrp-group 11 priority 110
+set interfaces irb unit 11 family inet address 10.163.28.252/28 vrrp-group 11 no-preempt
+set interfaces irb unit 11 family inet address 10.163.28.252/28 vrrp-group 11 accept-data
+set interfaces lo0 unit 0 description "## as1-dns.w103r08.ex3400.tcc1 router-id ##"
+set interfaces lo0 unit 0 family inet filter input telnet_access
+set interfaces lo0 unit 0 family inet address 10.10.2.88/32
+set interfaces me0 unit 0 family inet address 10.60.250.238/30
+set snmp community "hangame`12" authorization read-only
+set snmp community "hangame`12" clients 0.0.0.0/0 restrict
+set snmp community "hangame`12" clients 10.60.9.247/32
+set snmp community "hangame`12" clients 10.60.7.247/32
+set snmp community "hangame`12" clients 10.60.7.239/32
+set snmp community "hangame`12" clients 10.60.9.180/32
+set snmp community "hangame`12" clients 10.60.9.186/32
+set snmp community "hangame`12" clients 10.60.9.187/32
+set snmp community "hangame`12" clients 10.60.9.218/32
+set snmp community "hangame`12" clients 10.60.9.219/32
+set snmp community "hangame`12" clients 10.60.9.244/30
+set snmp community "hangame`12" clients 10.24.162.0/25
+set snmp community "hangame`12" clients 10.24.119.192/26
+set snmp community "hangame`12" clients 10.24.140.44/32
+set snmp community "hangame`12" clients 10.24.140.46/32
+set snmp community "hangame`12" clients 10.24.140.47/32
+set snmp community "hangame`12" clients 10.77.35.10/32
+set snmp community "hangame`12" clients 10.161.147.0/24
+set snmp community "hangame`12" clients 10.60.9.250/32
+set snmp community "hangame`12" clients 10.161.156.0/24
+set snmp community "hangame`12" clients 10.60.14.0/24
+set forwarding-options storm-control-profiles broad-multi_2k_pps all bandwidth-level 5000
+set forwarding-options storm-control-profiles broad-multi_2k_pps all no-unknown-unicast
+set forwarding-options storm-control-profiles default all
+set policy-options policy-statement ECMP then load-balance per-packet
+set policy-options policy-statement from_ebgp_external_cs3_4_import-policy term 10_extern_floating_network from protocol bgp
+set policy-options policy-statement from_ebgp_external_cs3_4_import-policy term 10_extern_floating_network from route-filter 0.0.0.0/0 prefix-length-range /24-/32
+set policy-options policy-statement from_ebgp_external_cs3_4_import-policy term 10_extern_floating_network then accept
+set policy-options policy-statement from_ebgp_external_cs3_4_import-policy term 100 then reject
+set policy-options policy-statement to_ebgp_external_cs3_4_export-policy term 10_infoblox_service_network from protocol direct
+set policy-options policy-statement to_ebgp_external_cs3_4_export-policy term 10_infoblox_service_network from route-filter 223.255.201.192/26 exact
+set policy-options policy-statement to_ebgp_external_cs3_4_export-policy term 10_infoblox_service_network then accept
+set policy-options policy-statement to_ebgp_external_cs3_4_export-policy term 100 then reject
+set policy-options policy-statement to_ibgp_interlink_redip term 100 then reject
+set policy-options policy-statement to_ibgp_interlink_redip term 10_extern_floating_network from protocol direct
+set policy-options policy-statement to_ibgp_interlink_redip term 10_extern_floating_network from route-filter 223.255.201.240/28 exact
+set policy-options policy-statement to_ibgp_interlink_redip term 10_extern_floating_network then next-hop self
+set policy-options policy-statement to_ibgp_interlink_redip term 10_extern_floating_network then accept
+set firewall family inet filter telnet_access term 10 from source-address 10.77.217.0/26
+set firewall family inet filter telnet_access term 10 from source-address 10.60.1.1/32
+set firewall family inet filter telnet_access term 10 from source-address 10.60.1.2/32
+set firewall family inet filter telnet_access term 10 from source-address 10.60.7.240/29
+set firewall family inet filter telnet_access term 10 from source-address 10.60.9.240/29
+set firewall family inet filter telnet_access term 10 from protocol tcp
+set firewall family inet filter telnet_access term 10 from destination-port ssh
+set firewall family inet filter telnet_access term 10 then accept
+set firewall family inet filter telnet_access term 20 from source-address 10.161.147.0/24
+set firewall family inet filter telnet_access term 20 from source-address 10.60.14.0/24
+set firewall family inet filter telnet_access term 20 from source-address 10.60.9.244/30
+set firewall family inet filter telnet_access term 20 from source-address 10.60.9.180/32
+set firewall family inet filter telnet_access term 20 from source-address 10.60.9.186/32
+set firewall family inet filter telnet_access term 20 from source-address 10.60.9.187/32
+set firewall family inet filter telnet_access term 20 from source-address 10.60.9.249/32
+set firewall family inet filter telnet_access term 20 from source-address 10.61.242.170/32
+set firewall family inet filter telnet_access term 20 from source-address 10.61.243.170/32
+set firewall family inet filter telnet_access term 20 from source-address 10.60.7.247/32
+set firewall family inet filter telnet_access term 20 from source-address 10.60.9.218/32
+set firewall family inet filter telnet_access term 20 from source-address 10.60.9.219/32
+set firewall family inet filter telnet_access term 20 from protocol udp
+set firewall family inet filter telnet_access term 20 from destination-port 161-162
+set firewall family inet filter telnet_access term 20 then accept
+set firewall family inet filter telnet_access term 30 from protocol tcp
+set firewall family inet filter telnet_access term 30 from destination-port ssh
+set firewall family inet filter telnet_access term 30 from destination-port telnet
+set firewall family inet filter telnet_access term 30 from destination-port ftp
+set firewall family inet filter telnet_access term 30 then discard
+set firewall family inet filter telnet_access term 40 from protocol udp
+set firewall family inet filter telnet_access term 40 from destination-port 161-162
+set firewall family inet filter telnet_access term 40 then discard
+set firewall family inet filter telnet_access term 50 from destination-port 111
+set firewall family inet filter telnet_access term 50 then discard
+set firewall family inet filter telnet_access term 100 then accept
+set routing-instances VR10_v10_infoblox_dns instance-type virtual-router
+set routing-instances VR10_v10_infoblox_dns routing-options router-id 10.10.2.88
+set routing-instances VR10_v10_infoblox_dns routing-options autonomous-system 64659
+set routing-instances VR10_v10_infoblox_dns routing-options static route 0.0.0.0/0 next-hop 10.10.5.229
+set routing-instances VR10_v10_infoblox_dns routing-options static route 0.0.0.0/0 next-hop 10.10.5.213
+set routing-instances VR10_v10_infoblox_dns routing-options static route 0.0.0.0/0 qualified-next-hop 223.255.201.253 metric 20
+set routing-instances VR10_v10_infoblox_dns routing-options static route 223.255.201.251/32 next-hop 223.255.201.241
+set routing-instances VR10_v10_infoblox_dns routing-options static route 223.255.201.246/32 next-hop 223.255.201.241
+set routing-instances VR10_v10_infoblox_dns routing-options static route 223.255.201.247/32 next-hop 223.255.201.241
+set routing-instances VR10_v10_infoblox_dns routing-options static route 223.255.201.248/32 next-hop 223.255.201.241
+set routing-instances VR10_v10_infoblox_dns routing-options static route 223.255.201.249/32 next-hop 223.255.201.241
+set routing-instances VR10_v10_infoblox_dns routing-options static route 223.255.201.250/32 next-hop 223.255.201.241
+set routing-instances VR10_v10_infoblox_dns protocols bgp group eBGP type external
+set routing-instances VR10_v10_infoblox_dns protocols bgp group eBGP multipath
+set routing-instances VR10_v10_infoblox_dns protocols bgp group eBGP neighbor 10.10.42.121 description "## ext.cs3-w103r04.q10002-36q.tcc1 ##"
+set routing-instances VR10_v10_infoblox_dns protocols bgp group eBGP neighbor 10.10.42.121 log-updown
+set routing-instances VR10_v10_infoblox_dns protocols bgp group eBGP neighbor 10.10.42.121 import from_ebgp_external_cs3_4_import-policy
+set routing-instances VR10_v10_infoblox_dns protocols bgp group eBGP neighbor 10.10.42.121 export to_ebgp_external_cs3_4_export-policy
+set routing-instances VR10_v10_infoblox_dns protocols bgp group eBGP neighbor 10.10.42.121 peer-as 64901
+set routing-instances VR10_v10_infoblox_dns protocols bgp group eBGP neighbor 10.10.42.129 description "## ext.cs4-w104r04.q10002-36q.tcc1 ##"
+set routing-instances VR10_v10_infoblox_dns protocols bgp group eBGP neighbor 10.10.42.129 log-updown
+set routing-instances VR10_v10_infoblox_dns protocols bgp group eBGP neighbor 10.10.42.129 import from_ebgp_external_cs3_4_import-policy
+set routing-instances VR10_v10_infoblox_dns protocols bgp group eBGP neighbor 10.10.42.129 export to_ebgp_external_cs3_4_export-policy
+set routing-instances VR10_v10_infoblox_dns protocols bgp group eBGP neighbor 10.10.42.129 peer-as 64901
+set routing-instances VR10_v10_infoblox_dns interface xe-0/2/0.1010
+set routing-instances VR10_v10_infoblox_dns interface xe-0/2/1.1030
+set routing-instances VR10_v10_infoblox_dns interface xe-0/2/2.0
+set routing-instances VR10_v10_infoblox_dns interface xe-0/2/3.0
+set routing-instances VR10_v10_infoblox_dns interface irb.3
+set routing-instances VR10_v10_infoblox_dns interface irb.10
+set routing-instances VR10_v10_infoblox_dns interface lo0.0
+set routing-instances VR11_v11_infoblox_mgmt instance-type virtual-router
+set routing-instances VR11_v11_infoblox_mgmt routing-options static route 0.0.0.0/0 next-hop 10.10.5.237
+set routing-instances VR11_v11_infoblox_mgmt routing-options static route 0.0.0.0/0 next-hop 10.10.5.221
+set routing-instances VR11_v11_infoblox_mgmt routing-options static route 0.0.0.0/0 qualified-next-hop 10.163.28.253 metric 20
+set routing-instances VR11_v11_infoblox_mgmt interface xe-0/2/0.1020
+set routing-instances VR11_v11_infoblox_mgmt interface xe-0/2/1.1040
+set routing-instances VR11_v11_infoblox_mgmt interface irb.11
+set routing-options static route 10.60.1.0/24 next-hop 10.60.250.237
+set routing-options static route 10.77.19.242/31 next-hop 10.60.250.237
+set routing-options static route 10.77.33.229/32 next-hop 10.60.250.237
+set routing-options static route 10.77.33.244/32 next-hop 10.60.250.237
+set routing-options static route 10.77.33.243/32 next-hop 10.60.250.237
+set routing-options static route 10.77.33.249/32 next-hop 10.60.250.237
+set routing-options static route 10.77.35.0/28 next-hop 10.60.250.237
+set routing-options static route 10.77.186.64/27 next-hop 10.60.250.237
+set routing-options static route 10.60.9.0/24 next-hop 10.60.250.237
+set routing-options static route 10.77.10.0/28 next-hop 10.60.250.237
+set routing-options static route 10.78.10.0/28 next-hop 10.60.250.237
+set routing-options static route 10.161.144.40/32 next-hop 10.60.250.237
+set routing-options static route 10.161.144.35/32 next-hop 10.60.250.237
+set routing-options static route 10.161.135.25/32 next-hop 10.60.250.237
+set routing-options static route 10.60.7.247/32 next-hop 10.60.250.237
+set routing-options static route 10.60.7.239/32 next-hop 10.60.250.237
+set routing-options static route 10.61.240.0/22 next-hop 10.60.250.237
+set routing-options static route 10.77.184.31/32 next-hop 10.60.250.237
+set routing-options static route 10.77.120.144/30 next-hop 10.60.250.237
+set routing-options static route 10.77.122.200/32 next-hop 10.60.250.237
+set routing-options forwarding-table export ECMP
+set protocols l2-learning global-mac-table-aging-time 14400
+set protocols lldp port-id-subtype interface-name
+set protocols lldp interface all
+set protocols lldp-med interface all
+set protocols layer2-control nonstop-bridging
+set protocols rstp bridge-priority 32k
+set protocols rstp interface ge-0/0/1 edge
+set protocols rstp interface ge-0/0/2 edge
+set protocols rstp interface ge-0/0/3 edge
+set protocols rstp interface ge-0/0/4 edge
+set protocols rstp interface ge-0/0/5 edge
+set protocols rstp interface ge-0/0/6 edge
+set protocols rstp interface ge-0/0/7 edge
+set protocols rstp interface ae0
+set protocols rstp bpdu-block-on-edge
+set vlans vlan0010 vlan-id 10
+set vlans vlan0010 l3-interface irb.10
+set vlans vlan0011 vlan-id 11
+set vlans vlan0011 l3-interface irb.11
+set vlans vlan3 vlan-id 3
+set vlans vlan3 l3-interface irb.3

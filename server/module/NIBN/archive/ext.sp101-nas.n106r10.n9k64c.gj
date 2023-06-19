@@ -1,0 +1,367 @@
+feature tacacs+
+cfs eth distribute
+feature ospf
+feature dhcp
+feature lldp
+clock timezone kst 9 0
+
+logging level l2fm 5
+no password strength-check
+username admin password gks1rp2dla# role network-admin
+username nhninfra password Xh1tm2xm# role network-admin
+username etech password etech123!@# role network-admin
+
+service unsupported-transceiver
+
+banner motd ^
+=======================================================================================
+
+        >>> ext.sp101-nas.n106r10.n9k64c.gj <<<
+
+! WARNING: Authorized Access Only.
+! This system is the property of NHN.
+! UNAUTHORIZED ACCESS TO THIS DEVICE IS PROHIBITED.
+! You must have explicit permission to access or configure this device. 
+! All activities performed on this device may be logged. 
+! Any violations of this policy may result in disciplinary action, 
+! and may be reported to law enforement. There is no right to privacy on this device.
+=======================================================================================
+^
+
+no ip domain-lookup
+
+tacacs-server key 7 "kqf123!@#"
+tacacs-server timeout 1
+tacacs-server host 10.77.122.200 
+aaa group server tacacs+ tacacs+ 
+ server 10.77.122.200 
+ use-vrf management
+ source-interface mgmt0
+
+crypto key generate rsa label module modulus 1024
+crypto key param rsa label ext.sp101-nas.n106r10.n9k64c.gj modulus 1024
+
+ip access-list 10
+ 10 permit ip 10.161.147.0/24 any 
+ 20 permit ip 10.60.14.0/24 any 
+ 30 permit ip 10.60.9.244/30 any 
+ 40 permit ip 10.60.9.180/32 any 
+ 50 permit ip 10.60.9.186/32 any 
+ 60 permit ip 10.60.9.187/32 any 
+ 70 permit ip 10.60.9.249/32 any 
+ 80 permit ip 10.61.242.170/32 any 
+ 90 permit ip 10.61.243.170/32 any 
+ 100 permit ip 10.60.7.247/32 any 
+ 110 permit ip 10.60.9.218/32 any 
+ 120 permit ip 10.60.9.219/32 any 
+
+
+ip access-list 5
+ 10 permit ip 10.77.35.0/28 any log
+ 20 permit ip 10.77.186.64/27 any log
+ 30 permit ip 10.78.10.0/28 any log
+ 40 permit ip 10.77.10.0/28 any log
+ 50 permit ip 10.77.120.144/30 any log
+ 60 permit ip 10.77.33.249/32 any log
+ 70 permit ip 10.77.33.229/32 any log
+ 80 permit ip 10.60.1.0/30 any log
+ 90 permit ip 10.63.255.0/24 any log
+ 200 permit ip 172.22.255.0/24 any log
+
+snmp-server context hangame12 vrf management snmp-server context hangame vrf management snmp-server community hangame12 group network-operator
+snmp-server mib community-map hangame12 context hangame snmp-server community hangame12 use-acl 10
+
+ntp server 10.63.20.3 prefer use-vrf management
+ntp source-interface mgmt0
+tacacs-server directed-request 
+
+aaa authentication login default group tacacs+ 
+aaa authentication login console group tacacs+ 
+aaa authorization config-commands default group tacacs+ local 
+aaa authorization commands default group tacacs+ local 
+aaa authorization config-commands console group tacacs+ local 
+aaa authorization commands console group tacacs+ local 
+aaa accounting default group tacacs+ 
+
+system jumbomtu 9216
+no ip source-route
+
+service dhcp
+ip dhcp relay
+ip dhcp smart-relay global
+ipv6 dhcp relay
+
+no cdp enable
+vrf context management
+ip route 0.0.0.0/0 10.63.251.21 name oob_network
+
+
+interface eth1/1
+description ## to ext.lf101-nas.s204r01.n9k64c.gj e1/61 172.22.253.2 back ## 
+no switchport
+ip address 172.22.253.1/30
+no shutdown
+ip router ospf 1 area 0.0.0.0
+ip ospf network point-to-point
+no ip ospf passive-interface
+mtu 9216
+logging event port link-status
+
+interface eth1/2
+description ## to as1-nas.ai.s201r03.n9k36c.gj e1/33 172.22.253.26 back ## 
+no switchport
+ip address 172.22.253.25/30
+no shutdown
+ip router ospf 1 area 0.0.0.0
+ip ospf network point-to-point
+no ip ospf passive-interface
+mtu 9216
+logging event port link-status
+
+interface eth1/3
+description ## to as1-nas.ai.s201r06.n9k36c.gj e1/33 172.22.253.30 back ## 
+no switchport
+ip address 172.22.253.29/30
+no shutdown
+ip router ospf 1 area 0.0.0.0
+ip ospf network point-to-point
+no ip ospf passive-interface
+mtu 9216
+logging event port link-status
+
+interface eth1/4
+description ## to as1-nas.ai.s201r10.n9k36c.gj e1/33 172.22.253.34 back ## 
+no switchport
+ip address 172.22.253.33/30
+no shutdown
+ip router ospf 1 area 0.0.0.0
+ip ospf network point-to-point
+no ip ospf passive-interface
+mtu 9216
+logging event port link-status
+
+interface eth1/5
+description ## to as1-nas.ai.s204r03.n9k36c.gj e1/33 172.22.253.38 back ## 
+no switchport
+ip address 172.22.253.37/30
+no shutdown
+ip router ospf 1 area 0.0.0.0
+ip ospf network point-to-point
+no ip ospf passive-interface
+mtu 9216
+logging event port link-status
+
+interface eth1/6
+description ## to as1-nas.ai.s204r06.n9k36c.gj e1/33 172.22.253.42 back ## 
+no switchport
+ip address 172.22.253.41/30
+no shutdown
+ip router ospf 1 area 0.0.0.0
+ip ospf network point-to-point
+no ip ospf passive-interface
+mtu 9216
+logging event port link-status
+
+interface eth1/7
+description ## to as1-nas.ai.s204r10.n9k36c.gj e1/33 172.22.253.46 back ## 
+no switchport
+ip address 172.22.253.45/30
+no shutdown
+ip router ospf 1 area 0.0.0.0
+ip ospf network point-to-point
+no ip ospf passive-interface
+mtu 9216
+logging event port link-status
+
+interface eth1/8
+description ## to as1-nas.cld.n103r09.n9k36c.gj e1/33 172.22.253.50 back ## 
+no switchport
+ip address 172.22.253.49/30
+no shutdown
+ip router ospf 1 area 0.0.0.0
+ip ospf network point-to-point
+no ip ospf passive-interface
+mtu 9216
+logging event port link-status
+
+interface eth1/9
+description ## to as1-nas.cld.n104r09.n9k36c.gj e1/33 172.22.253.54 back ## 
+no switchport
+ip address 172.22.253.53/30
+no shutdown
+ip router ospf 1 area 0.0.0.0
+ip ospf network point-to-point
+no ip ospf passive-interface
+mtu 9216
+logging event port link-status
+
+interface eth1/10
+description ## to ext.lf103-nas.n106r02.n9k36c.gj e1/33 172.22.253.10 back ## 
+no switchport
+ip address 172.22.253.9/30
+no shutdown
+ip router ospf 1 area 0.0.0.0
+ip ospf network point-to-point
+no ip ospf passive-interface
+mtu 9216
+logging event port link-status
+
+interface eth1/11
+description ## to ext.lf105-nas.n106r02.n9k36c.gj e1/33 172.22.253.18 back ## 
+no switchport
+ip address 172.22.253.17/30
+no shutdown
+ip router ospf 1 area 0.0.0.0
+ip ospf network point-to-point
+no ip ospf passive-interface
+mtu 9216
+logging event port link-status
+
+interface eth1/31
+description ## to ext.lf102-nas.s205r01.n9k64c.gj e1/61 172.22.253.6 back ## 
+no switchport
+ip address 172.22.253.5/30
+no shutdown
+ip router ospf 1 area 0.0.0.0
+ip ospf network point-to-point
+no ip ospf passive-interface
+mtu 9216
+logging event port link-status
+
+interface eth1/32
+description ## to as2-nas.ai.s201r04.n9k36c.gj e1/33 172.22.253.58 back ## 
+no switchport
+ip address 172.22.253.57/30
+no shutdown
+ip router ospf 1 area 0.0.0.0
+ip ospf network point-to-point
+no ip ospf passive-interface 
+mtu 9216
+logging event port link-status
+
+interface eth1/33
+description ## to as2-nas.ai.s201r07.n9k36c.gj e1/33 172.22.253.62 back ## 
+no switchport
+ip address 172.22.253.61/30
+no shutdown
+ip router ospf 1 area 0.0.0.0
+ip ospf network point-to-point
+no ip ospf passive-interface
+mtu 9216
+logging event port link-status
+
+interface eth1/34
+description ## to as2-nas.ai.s201r11.n9k36c.gj e1/33 172.22.253.66 back ## 
+no switchport
+ip address 172.22.253.65/30
+no shutdown
+ip router ospf 1 area 0.0.0.0
+ip ospf network point-to-point
+no ip ospf passive-interface
+mtu 9216
+logging event port link-status
+
+interface eth1/35
+description ## to as2-nas.ai.s204r04.n9k36c.gj e1/33 172.22.253.70 back ## 
+no switchport
+ip address 172.22.253.69/30
+no shutdown
+ip router ospf 1 area 0.0.0.0
+ip ospf network point-to-point
+no ip ospf passive-interface
+mtu 9216
+logging event port link-status
+
+interface eth1/36
+description ## to as2-nas.ai.s204r07.n9k36c.gj e1/33 172.22.253.74 back ## 
+no switchport
+ip address 172.22.253.73/30
+no shutdown
+ip router ospf 1 area 0.0.0.0
+ip ospf network point-to-point
+no ip ospf passive-interface
+mtu 9216
+logging event port link-status
+
+interface eth1/37
+description ## to as2-nas.ai.s204r11.n9k36c.gj e1/33 172.22.253.78 back ## 
+no switchport
+ip address 172.22.253.77/30
+no shutdown
+ip router ospf 1 area 0.0.0.0
+ip ospf network point-to-point
+no ip ospf passive-interface
+mtu 9216
+logging event port link-status
+
+interface eth1/38
+description ## to as2-nas.cld.n103r10.n9k36c.gj e1/33 172.22.253.82 back ## 
+no switchport
+ip address 172.22.253.81/30
+no shutdown
+ip router ospf 1 area 0.0.0.0
+ip ospf network point-to-point
+no ip ospf passive-interface
+mtu 9216
+logging event port link-status
+
+interface eth1/39
+description ## to as2-nas.cld.n104r10.n9k36c.gj e1/33 172.22.253.86 back ## 
+no switchport
+ip address 172.22.253.85/30
+no shutdown
+ip router ospf 1 area 0.0.0.0
+ip ospf network point-to-point
+no ip ospf passive-interface
+mtu 9216
+logging event port link-status
+
+interface eth1/40
+description ## to ext.lf104-nas.n107r02.n9k36c.gj e1/33 172.22.253.14 back ## 
+no switchport
+ip address 172.22.253.13/30
+no shutdown
+ip router ospf 1 area 0.0.0.0
+ip ospf network point-to-point
+no ip ospf passive-interface
+mtu 9216
+logging event port link-status
+
+interface eth1/41
+description ## to ext.lf106-nas.n107r02.n9k36c.gj e1/33 172.22.253.22 back ## 
+no switchport
+ip address 172.22.253.21/30
+no shutdown
+ip router ospf 1 area 0.0.0.0
+ip ospf network point-to-point
+no ip ospf passive-interface
+mtu 9216
+logging event port link-status
+
+
+interface mgmt0
+ vrf member management
+ ip address 10.63.251.22/30
+ no shutdown
+
+interface loopback 0
+ ip address 172.22.255.1/32
+ ip router ospf 1 area 0.0.0.0
+ no shutdown
+
+cli alias name wr copy run start
+
+line console 
+ exec-timeout 5
+line vty 
+ exec-timeout 15
+ access-class 5 in
+
+router ospf 1
+router-id 172.22.255.1
+auto-cost reference-bandwidth 100 gbps
+
+
+logging server 10.161.144.40 5 use-vrf management facility local1
+logging source-interface mgmt0
+logging timestamp milliseconds

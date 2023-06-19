@@ -1,0 +1,4 @@
+SYSLOG||set system syslog||0
+SYSLOG||set,system,syslog,host,||3(key),4
+SYSLOG||set,system,syslog,host,match||3(key),4,5
+SYSLOG||set,system,syslog,source-address||3(key),4

@@ -1,0 +1,74 @@
+﻿Last login: Mon Feb 13 14:17:54 2023 from 10.77.120.145
+--- JUNOS 18.4R2-S3 Kernel 64-bit  JNPR-11.0-20191223.5f5c7dc_buil
+
+{master:0}
+icraft@gw.bds1-w103r05.q5110-48s.tcc1> 
+
+{master:0}
+icraft@gw.bds1-w103r05.q5110-48s.tcc1> ssh 10.62.224.6 source 10.60.1.1 
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@    WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!     @
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+IT IS POSSIBLE THAT SOMEONE IS DOING SOMETHING NASTY!
+Someone could be eavesdropping on you right now (man-in-the-middle attack)!
+It is also possible that a host key has just been changed.
+The fingerprint for the RSA key sent by the remote host is
+SHA256:7r1HweIEFHBCBqxOY79gRI++a2+9Ux6LzeLwSMtL1pk.
+Please contact your system administrator.
+Add correct host key in /var/home/icraft/.ssh/known_hosts to get rid of this message.
+Offending ECDSA key in /var/home/icraft/.ssh/known_hosts:124
+RSA host key for 10.62.224.6 has changed and you have requested strict checking.
+Host key verification failed.
+
+{master:0}
+icraft@gw.bds1-w103r05.q5110-48s.tcc1> start shell 
+% vi /var/home/icraft/.ssh/known_hosts
+% exit
+exit
+
+{master:0}
+icraft@gw.bds1-w103r05.q5110-48s.tcc1> ssh 10.62.224.6 source 10.60.1.1    
+The authenticity of host '10.62.224.6 (10.62.224.6)' can't be established.
+RSA key fingerprint is SHA256:7r1HweIEFHBCBqxOY79gRI++a2+9Ux6LzeLwSMtL1pk.
+Are you sure you want to continue connecting (yes/no)? yes
+Warning: Permanently added '10.62.224.6' (RSA) to the list of known hosts.
+
+=======================================================================================
+                         
+                     >>> ext.sp1-pcr.e304r02.nx9336.ncc1 <<<
+
+! WARNING: Authorized Access Only.
+! This system is the property of NHN.
+! UNAUTHORIZED ACCESS TO THIS DEVICE IS PROHIBITED.
+! You must have explicit permission to access or configure this device. 
+! All activities performed on this device may be logged. 
+! Any violations of this policy may result in disciplinary action, 
+! and may be reported to law enforement. There is no right to privacy on this device.
+=======================================================================================
+Password: 
+
+Cisco Nexus Operating System (NX-OS) Software
+TAC support: http://www.cisco.com/tac
+Copyright (C) 2002-2022, Cisco and/or its affiliates.
+All rights reserved.
+The copyrights to certain works contained in this software are
+owned by other third parties and used and distributed under their own
+licenses, such as open source.  This software is provided "as is," and unless
+otherwise stated, there is no warranty, express or implied, including but not
+limited to warranties of merchantability and fitness for a particular purpose.
+Certain components of this software are licensed under
+the GNU General Public License (GPL) version 2.0 or 
+GNU General Public License (GPL) version 3.0  or the GNU
+Lesser General Public License (LGPL) Version 2.1 or 
+Lesser General Public License (LGPL) Version 2.0. 
+A copy of each such license is available at
+http://www.opensource.org/licenses/gpl-2.0.php and
+http://opensource.org/licenses/gpl-3.0.html and
+http://www.opensource.org/licenses/lgpl-2.1.php and
+http://www.gnu.org/licenses/old-licenses/library.txt.
+ext.sp1-pcr.e304r02.nx9336.ncc1# exit
+Connection to 10.62.224.6 closed.
+
+{master:0}
+icraft@gw.bds1-w103r05.q5110-48s.tcc1> exit 
+

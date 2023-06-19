@@ -1,0 +1,2 @@
+ACL,telnet||set firewall family inet filter telnet_access term||0
+ACL,telnet||set firewall family inet filter telnet_access term,from source-address||5(key),10

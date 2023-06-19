@@ -1,0 +1,3401 @@
+Adc1-group3.thunder1040s.tcc1-Active#show run
+!Current configuration: 3856 bytes
+!Configuration last updated at 15:24:48 KST Wed May 24 2023
+!Configuration last saved at 15:24:52 KST Wed May 24 2023
+!64-bit Advanced Core OS (ACOS) version 4.1.4-GR1-P11, build 45 (Jul-28-2022,17:22)
+!
+vrrp-a common
+  device-id 1
+  set-id 1
+  disable-default-vrid
+  enable
+!
+accounting commands 15 stop-only tacplus
+!
+accounting exec start-stop tacplus
+!
+authorization commands 15 method tacplus none
+!
+banner login =====================================================================================\n\n                                  >>> Adc-group3.thunder1040s.tcc1<<<                              \n\n! WARNING: Authorized Access Only.\n! This system is the property of NHN Corp.\n! UNAUTHORIZED ACCESS TO THIS DEVICE IS PROHIBITED.\n! You must have explicit permission to access or configure this device.\n! All activities performed on this device may be logged.\n! Any violations of this policy may result in disciplinary action,\n! and may be reported to law enforcement. There is no right to privacy on this device.\n======================================================================================
+!
+authentication type tacplus local
+authentication login privilege-mode
+!
+multi-config enable
+!
+no terminal auto-size
+terminal idle-timeout 5
+terminal width 512
+!
+vlan 13
+  tagged trunk 1
+  router-interface ve 13
+!
+vlan 23
+  tagged trunk 1
+  router-interface ve 23
+!
+vlan 819
+  tagged trunk 1
+  router-interface ve 819
+!
+vlan 883
+  tagged trunk 1
+  router-interface ve 883
+!
+vlan 900
+  tagged trunk 1
+  router-interface ve 900
+!
+vlan 907
+  tagged trunk 1
+  router-interface ve 907
+!
+vlan 914
+  tagged trunk 1
+  router-interface ve 914
+!
+vlan 915
+  tagged trunk 1
+  router-interface ve 915
+!
+vlan 925
+  tagged trunk 1
+  router-interface ve 925
+!
+vlan 939
+  tagged trunk 1
+  router-interface ve 939
+!
+vlan 942
+  tagged trunk 1
+  router-interface ve 942
+!
+vlan 943
+  tagged trunk 1
+  router-interface ve 943
+!
+vlan 946
+  tagged trunk 1
+  router-interface ve 946
+!
+vlan 1024
+  untagged trunk 1024
+  router-interface ve 1024
+!
+hostname Adc1-group3.thunder1040s.tcc1
+!
+timezone Asia/Seoul
+!
+ntp server 10.60.1.1
+  prefer
+!
+ntp server 10.60.1.2
+!
+!
+tacacs-server host 10.77.122.200 secret encrypted G5PfdEOVKOJmG3CJT74S0me7F+GmJL4n5osdGNiGjJbzhkQ21z0rZxrGcltNQwOc
+!
+interface management
+  ip address 10.60.4.126 255.255.255.252
+  ip control-apps-use-mgmt-port
+  ip default-gateway 10.60.4.125
+!
+interface ethernet 1
+  enable
+  trunk-group 1024 lacp
+!
+interface ethernet 2
+  enable
+  trunk-group 1024 lacp
+!
+interface ethernet 3
+!
+interface ethernet 4
+!
+interface ethernet 5
+!
+interface ethernet 6
+!
+interface ethernet 7
+!
+interface ethernet 8
+  enable
+  trunk-group 1 lacp
+!
+interface ethernet 9
+  enable
+  trunk-group 1 lacp
+!
+interface ve 13
+  name VIP_Private#1
+  ip address 10.165.130.253 255.255.255.0
+!
+interface ve 23
+  name VIP_Public#1
+  ip address 45.125.233.125 255.255.255.128
+!
+interface ve 819
+  ip address 10.162.44.252 255.255.255.0
+!
+interface ve 883
+  ip address 10.161.97.250 255.255.255.0
+  ip address 10.161.119.250 255.255.255.0
+!
+interface ve 900
+  ip address 10.161.127.251 255.255.255.0
+!
+interface ve 907
+  ip address 10.162.146.253 255.255.255.0
+  ip address 10.161.133.251 255.255.255.0
+!
+interface ve 914
+  ip address 10.161.138.250 255.255.255.0
+!
+interface ve 915
+  ip address 10.162.149.251 255.255.255.0
+  ip address 10.162.19.251 255.255.255.0
+  ip address 10.162.50.251 255.255.255.0
+  ip address 10.162.53.251 255.255.255.0
+!
+interface ve 925
+  ip address 10.161.147.251 255.255.255.0
+!
+interface ve 939
+  ip address 10.161.158.251 255.255.255.0
+!
+interface ve 942
+  ip address 10.161.160.251 255.255.255.0
+!
+interface ve 943
+  ip address 10.161.161.251 255.255.255.0
+!
+interface ve 946
+  ip address 10.161.164.251 255.255.255.0
+!
+interface ve 1024
+  ip address 192.168.10.1 255.255.255.252
+!
+vrrp-a fail-over-policy-template tracking
+  trunk 1 weight 2
+!
+!
+vrrp-a vrid 1
+  preempt-mode disable
+  blade-parameters
+    priority 100
+    fail-over-policy-template tracking
+!
+ip nat pool SNAT-PP 10.165.130.250 10.165.130.250 netmask /24 vrid 1
+!
+enable-management service ssh
+  ve 1024
+!
+ip route 0.0.0.0 /0 10.165.130.1
+!
+ip route 10.60.1.1 /32 10.60.4.125
+!
+ip route 10.60.1.2 /32 10.60.4.125
+!
+ip route 10.60.7.247 /32 10.60.4.125
+!
+ip route 10.60.9.244 /30 10.60.4.125
+!
+ip route 10.77.19.242 /32 10.60.4.125
+!
+slb common
+  dsr-health-check-enable
+  drop-icmp-to-vip-when-vip-down
+!
+health monitor HTTPS_10443_10.165.130.10_L2DSR
+  retry 2
+  method https port 10443 expect response-code 200 url GET /monitor/l7check
+!
+health monitor HTTP_80_10.165.130.11_L2DSR
+  retry 2
+  method http expect response-code 200 url GET /monitor/l7check
+!
+health monitor TCP_13306_10.165.130.12_L2DSR
+  retry 2
+  method tcp port 13306
+!
+health monitor TCP_4119_45.125.233.11_L2DSR
+  retry 2
+  method tcp port 4119
+!
+health monitor TCP_4120_45.125.233.11_L2DSR
+  retry 2
+  method tcp port 4120
+!
+health monitor TCP_4122_45.125.233.11_L2DSR
+  retry 2
+  method tcp port 4122
+!
+health monitor TCP_13306_10.165.130.16_L2DSR
+  retry 2
+  method tcp port 13306
+!
+health monitor TCP_13306_10.165.130.17_L2DSR
+  retry 2
+  method tcp port 13306
+!
+health monitor TCP_13306_10.165.130.18_L2DSR
+  retry 2
+  method tcp port 13306
+!
+health monitor TCP_13306_10.165.130.19_L2DSR
+  retry 2
+  method tcp port 13306
+!
+health monitor TCP_13306_10.165.130.20_L2DSR
+  retry 2
+  method tcp port 13306
+!
+health monitor TCP_13306_10.165.130.21_L2DSR
+  retry 2
+  method tcp port 13306
+!
+health monitor TCP_13306_10.165.130.22_L2DSR
+  retry 2
+  method tcp port 13306
+!
+health monitor TCP_13306_10.165.130.23_L2DSR
+  retry 2
+  method tcp port 13306
+!
+health monitor HTTP_80_10.165.130.25_L2DSR
+  retry 2
+  method http expect response-code 200 url GET /monitor/l7check.html
+!
+health monitor HTTPS_443_45.125.233.12_L2DSR
+  retry 2
+  method https expect response-code 200 url GET /monitor/l7check
+!
+health monitor TCP_6443_10.165.130.28_L2DSR
+  retry 2
+  method tcp port 6443
+!
+health monitor TCP_6443_10.165.130.29_L2DSR
+  retry 2
+  method tcp port 6443
+!
+health monitor HTTP_2379_10.165.130.31_L2DSR
+  retry 2
+  method http port 2379 expect response-code 200 url GET /health
+!
+health monitor HTTP_80_45.125.233.13_L2DSR
+  retry 2
+  method http expect response-code 200 url GET /healthcheck
+!
+health monitor HTTPS_443_45.125.233.13_L2DSR
+  retry 2
+  method https expect response-code 200 url GET /healthcheck
+!
+health monitor TCP_9511_10.165.130.30_L2DSR
+  retry 2
+  method tcp port 9511
+!
+health monitor TCP_13306_10.165.130.33_L2DSR
+  retry 2
+  method tcp port 13306
+!
+health monitor HTTP_80_45.125.233.14_L2DSR
+  retry 2
+  method http expect response-code 200 url GET /monitor/l7check.html
+!
+health monitor HTTPS_443_45.125.233.14_L2DSR
+  retry 2
+  method https expect response-code 200 url GET /monitor/l7check.html
+!
+health monitor TCP_9292_45.125.233.15_PROXY
+  retry 2
+  method tcp port 9292
+!
+health monitor HTTPS_443_10.165.130.34_L2DSR
+  retry 2
+  method https expect response-code 200 url GET /monitor/l7check
+!
+health monitor HTTPS_443_45.125.233.16_L2DSR
+  retry 2
+  method https expect response-code 200 url GET /monitor/l7check
+!
+health monitor TCP_25_10.165.130.35_L2DSR
+  retry 2
+  override-port 25
+  method tcp port 25
+!
+health monitor HTTP_10026_10.165.130.35_L2DSR
+  retry 2
+  override-port 10026
+  method http port 10026 expect response-code 200 url GET /monitor/l7check
+!
+health monitor COMPOUND_10.165.130.35_L2DSR
+  retry 2
+  method compound sub TCP_25_10.165.130.35_L2DSR sub HTTP_10026_10.165.130.35_L2DSR  and
+!
+health monitor TCP_10620_10.165.130.13_L2DSR
+  retry 2
+  method tcp port 10620
+!
+health monitor TCP_7060_45.125.233.16_L2DSR
+  retry 2
+  method tcp port 7060
+!
+health monitor HTTPS_443_45.125.233.17_L2DSR
+  retry 2
+  method https expect response-code 200 url GET /monitor/l7check
+!
+health monitor HTTPS_443_45.125.233.18_L2DSR
+  retry 2
+  method https expect response-code 200 url GET /monitor/l7check
+!
+health monitor TCP_7060_45.125.233.17_L2DSR
+  retry 2
+  method tcp port 7060
+!
+health monitor TCP_7060_45.125.233.18_L2DSR
+  retry 2
+  method tcp port 7060
+!
+health monitor TCP_10180_10.165.130.13_L2DSR
+  retry 2
+  method tcp port 10180
+!
+health monitor TCP_10620_10.165.130.37_L2DSR
+  retry 2
+  method tcp port 10620
+!
+health monitor TCP_10620_10.165.130.38_L2DSR
+  retry 2
+  method tcp port 10620
+!
+health monitor TCP_10620_10.165.130.39_L2DSR
+  retry 2
+  method tcp port 10620
+!
+health monitor TCP_10180_10.165.130.37_L2DSR
+  retry 2
+  method tcp port 10180
+!
+health monitor TCP_10180_10.165.130.38_L2DSR
+  retry 2
+  method tcp port 10180
+!
+health monitor TCP_10180_10.165.130.39_L2DSR
+  retry 2
+  method tcp port 10180
+!
+health monitor HTTP_10180_10.165.130.36_L2DSR
+  retry 2
+  method http port 10180 expect response-code 200 url GET /monitor/l7check
+!
+health monitor HTTP_10180_10.165.130.40_L2DSR
+  retry 2
+  method http port 10180 expect response-code 200 url GET /monitor/l7check
+!
+health monitor HTTP_10180_10.165.130.41_L2DSR
+  retry 2
+  method http port 10180 expect response-code 200 url GET /monitor/l7check
+!
+health monitor HTTP_10180_10.165.130.42_L2DSR
+  retry 2
+  method http port 10180 expect response-code 200 url GET /monitor/l7check
+!
+health monitor HTTP_80_45.125.233.16_L2DSR
+  retry 2
+  method http expect response-code 200 url GET /monitor/l7check
+!
+health monitor TCP_7060_10.165.130.43_L2DSR
+  retry 2
+  method tcp port 7060
+!
+health monitor TCP_7060_10.165.130.44_L2DSR
+  retry 2
+  method tcp port 7060
+!
+health monitor TCP_7060_10.165.130.45_L2DSR
+  retry 2
+  method tcp port 7060
+!
+health monitor HTTP_80_45.125.233.20_L2DSR
+  retry 2
+  method http expect response-code 200 url GET /monitor/l7check.nhn
+!
+health monitor HTTPS_443_45.125.233.20_L2DSR
+  retry 2
+  method https expect response-code 200 url GET /monitor/l7check.nhn
+!
+health monitor HTTP_10190_10.165.130.48_L2DSR
+  retry 2
+  method http port 10190 expect response-code 200 url GET /monitor/l7check
+!
+health monitor TCP_13306_10.165.130.47_PROXY
+  retry 2
+  method tcp port 13306
+!
+health monitor TCP_80_10.165.130.49_L2DSR
+  retry 2
+  method tcp port 80
+!
+health monitor HTTPS_443_45.125.233.21_L2DSR
+  retry 2
+  method https expect response-code 200 url GET /monitor/l7check
+!
+health monitor TCP_7060_45.125.233.21_L2DSR
+  retry 2
+  method tcp port 7060
+!
+health monitor TCP_7060_10.165.130.50_L2DSR
+  retry 2
+  method tcp port 7060
+!
+health monitor TCP_10180_10.165.130.52_L2DSR
+  retry 2
+  method tcp port 10180
+!
+health monitor TCP_10620_10.165.130.52_L2DSR
+  retry 2
+  method tcp port 10620
+!
+health monitor TCP_10180_10.165.130.53_L2DSR
+  retry 2
+  method tcp port 10180
+!
+health monitor TCP_10620_10.165.130.53_L2DSR
+  retry 2
+  method tcp port 10620
+!
+health monitor TCP_10180_10.165.130.54_L2DSR
+  retry 2
+  method tcp port 10180
+!
+health monitor TCP_10180_10.165.130.55_L2DSR
+  retry 2
+  method tcp port 10180
+!
+health monitor TCP_20514_45.125.233.23_L2DSR
+  retry 2
+  method tcp port 20514
+!
+health monitor UDP_20514_45.125.233.23_L2DSR
+  retry 2
+  method udp port 20514
+!
+health monitor TCP_20514_45.125.233.24_L2DSR
+  retry 2
+  method tcp port 20514
+!
+health monitor UDP_20514_45.125.233.24_L2DSR
+  retry 2
+  method udp port 20514
+!
+health monitor HTTP_9201_10.165.130.56_L2DSR
+  retry 2
+  method http port 9201 expect response-code 200 url GET /v1/health
+!
+health monitor HTTP_9201_10.165.130.57_L2DSR
+  retry 2
+  method http port 9201 expect response-code 200 url GET /v1/health
+!
+health monitor HTTPS_443_10.165.130.25_L2DSR
+  retry 2
+  method https expect response-code 200 url GET /monitor/l7check.html
+!
+health monitor TCP_13306_10.165.130.58_L2DSR
+  retry 2
+  method tcp port 13306
+!
+health monitor HTTP_80_45.125.233.25_L2DSR
+  retry 2
+  override-port 80
+  method http expect response-code 200 url GET /monitor/l7check.nhn
+!
+health monitor HTTPS_443_45.125.233.25_L2DSR
+  retry 2
+  override-port 443
+  method https expect response-code 200 url GET /monitor/l7check.nhn
+!
+health monitor TCP_15881_45.125.233.25_L2DSR
+  retry 2
+  override-port 15881
+  method tcp port 15881
+!
+health monitor TCP_8004_10.165.130.15_L2DSR
+  retry 2
+  method tcp port 8004
+!
+health monitor TCP_8000_10.165.130.15_L2DSR
+  retry 2
+  method tcp port 8000
+!
+health monitor HTTPS_443_45.125.233.26_L2DSR
+  retry 2
+  override-port 443
+  method https expect response-code 200 url GET /monitor/l7check.nhn
+!
+health monitor TCP_15881_45.125.233.29_L2DSR
+  retry 2
+  override-port 15881
+  method tcp port 15881
+!
+health monitor HTTP_80_45.125.233.27_L2DSR
+  retry 2
+  override-port 80
+  method http expect response-code 200 url GET /monitor/l7check.nhn
+!
+health monitor HTTPS_443_45.125.233.27_L2DSR
+  retry 2
+  override-port 443
+  method https expect response-code 200 url GET /monitor/l7check.nhn
+!
+health monitor TCP_15881_45.125.233.26_L2DSR
+  retry 2
+  override-port 15881
+  method tcp port 15881
+!
+health monitor HTTP_80_45.125.233.26_L2DSR
+  retry 2
+  override-port 80
+  method http expect response-code 200 url GET /monitor/l7check.nhn
+!
+health monitor HTTP_80_45.125.233.29_L2DSR
+  retry 2
+  override-port 80
+  method http expect response-code 200 url GET /monitor/l7check.nhn
+!
+health monitor HTTPS_443_45.125.233.29_L2DSR
+  retry 2
+  override-port 443
+  method https expect response-code 200 url GET /monitor/l7check.nhn
+!
+health monitor HTTP_10254_10.165.130.46_L2DSR
+  retry 2
+  override-port 10254
+  method http expect response-code 200 url GET /healthz
+!
+health monitor HTTPS_443_45.125.233.19_L2DSR
+  retry 2
+  method https expect response-code 200 url GET /monitor/l7check
+!
+health monitor TCP_7060_45.125.233.19_L2DSR
+  retry 2
+  method tcp port 7060
+!
+health monitor TCP_25_10.165.130.51_L2DSR
+  retry 2
+  override-port 25
+  method tcp port 25
+!
+health monitor HTTPS_443_10.165.130.26_L2DSR
+  retry 2
+  override-port 443
+  method https expect response-code 200 url GET /ping
+!
+health monitor HTTP_80_10.165.130.26_L2DSR
+  retry 2
+  override-port 80
+  method http expect response-code 200 url GET /ping
+!
+health monitor HTTPS_443_10.165.130.59_L2DSR
+  retry 2
+  override-port 443
+  method https expect response-code 200 url GET /common/L7check.jsp
+!
+health monitor HTTP_80_10.165.130.59_L2DSR
+  retry 2
+  override-port 80
+  method http expect response-code 200 url GET /common/L7check.jsp
+!
+health monitor HTTPS_443_10.165.130.60_L2DSR
+  retry 2
+  override-port 443
+  method https expect response-code 200 url GET /common/l7check.jsp
+!
+health monitor HTTP_80_10.165.130.60_L2DSR
+  retry 2
+  override-port 80
+  method http expect response-code 200 url GET /common/l7check.jsp
+!
+health monitor HTTP_80_10.165.130.61_L2DSR
+  retry 2
+  override-port 80
+  method http expect response-code 200 url GET /monitor/l7check
+!
+health monitor HTTPS_443_10.165.130.61_L2DSR
+  retry 2
+  override-port 443
+  method https expect response-code 200 url GET /monitor/l7check
+!
+health monitor HTTPS_443_10.165.130.62_L2DSR
+  retry 2
+  override-port 443
+  method https expect response-code 200 url GET /common/l7check.jsp
+!
+health monitor HTTP_80_10.165.130.62_L2DSR
+  retry 2
+  override-port 80
+  method http expect response-code 200 url GET /common/l7check.jsp
+!
+health monitor TCP_7080_10.165.130.63_L2DSR
+  retry 2
+  override-port 7080
+  method tcp port 7080
+!
+health monitor HTTP_10254_45.125.233.30_L2DSR
+  retry 2
+  override-port 10254
+  method http expect response-code 200 url GET /healthz
+!
+health monitor HTTP_10254_10.165.130.64_L2DSR
+  retry 2
+  override-port 10254
+  method http expect response-code 200 url GET /healthz
+!
+health monitor HTTP_10254_10.165.130.66_L2DSR
+  retry 2
+  override-port 10254
+  method http expect response-code 200 url GET /healthz
+!
+health monitor HTTPS_443_10.165.130.67_L2DSR
+  retry 2
+  method https expect response-code 200 url GET /monitor/l7check
+!
+health monitor TCP_80_10.165.130.68_L2DSR
+  retry 2
+  override-port 80
+  method tcp port 80
+!
+health monitor HTTP_5001_10.165.130.24_L2DSR
+  retry 2
+  override-port 5001
+  method http expect response-code 200 url GET /monitor/l7check.nhn
+!
+health monitor TCP_5000_10.165.130.24_L2DSR
+  retry 2
+  override-port 5000
+  method tcp port 5000
+!
+health monitor HTTP_10080_10.165.130.14_L2DSR
+  retry 2
+  override-port 10080
+  method http expect response-code 200 url GET /monitor/l7check
+!
+health monitor HTTP_10003_10.165.130.65_L2DSR
+  retry 2
+  method http expect response-code 200 url GET /monitor/l7check.nhn
+!
+health monitor TCP_9511_10.165.130.27_L2DSR
+  retry 2
+  override-port 9511
+  method tcp port 9511
+!
+health monitor TCP_80_10.165.130.69_PROXY
+  retry 2
+  override-port 80
+  method tcp port 80
+!
+slb template port default
+  del-session-on-server-down
+!
+slb server DUT#01 10.161.135.120
+  port 80 tcp
+    health-check-disable
+  port 443 tcp
+    health-check-disable
+!
+slb server SECA-DEEP-T1001 10.161.138.58
+  port 4119 tcp
+    health-check-disable
+  port 4120 tcp
+    health-check-disable
+  port 4122 tcp
+    health-check-disable
+!
+slb server adlapp-gwx901 10.162.44.33
+  port 80 tcp
+    health-check-disable
+  port 443 tcp
+    health-check-disable
+!
+slb server adlapp-gwx902 10.162.44.34
+  port 80 tcp
+    health-check-disable
+  port 443 tcp
+    health-check-disable
+!
+slb server adlapp-gwx903 10.162.44.35
+  port 80 tcp
+    health-check-disable
+  port 443 tcp
+    health-check-disable
+!
+slb server adlapp-gwx904 10.162.44.36
+  port 80 tcp
+    health-check-disable
+  port 443 tcp
+    health-check-disable
+!
+slb server adlapp-gwx905 10.162.44.37
+  port 80 tcp
+    health-check-disable
+  port 443 tcp
+    health-check-disable
+!
+slb server adlapp-gwx906 10.162.44.38
+  port 80 tcp
+    health-check-disable
+  port 443 tcp
+    health-check-disable
+!
+slb server adlapp-gwx907 10.162.44.39
+  port 80 tcp
+    health-check-disable
+  port 443 tcp
+    health-check-disable
+!
+slb server adlapp-gwx908 10.162.44.40
+  port 80 tcp
+    health-check-disable
+  port 443 tcp
+    health-check-disable
+!
+slb server adlapp-gwx909 10.162.44.41
+  port 80 tcp
+    health-check-disable
+  port 443 tcp
+    health-check-disable
+!
+slb server adlapp-gwx910 10.162.44.42
+  port 80 tcp
+    health-check-disable
+  port 443 tcp
+    health-check-disable
+!
+slb server adlapp-gwx911 10.162.44.43
+  port 80 tcp
+    health-check-disable
+  port 443 tcp
+    health-check-disable
+!
+slb server adlapp-gwx912 10.162.44.44
+  port 80 tcp
+    health-check-disable
+  port 443 tcp
+    health-check-disable
+!
+slb server apia-agdev-t1901 10.161.160.41
+  port 80 tcp
+    health-check-disable
+  port 443 tcp
+    health-check-disable
+  port 15881 tcp
+    health-check-disable
+!
+slb server apia-agdev-t1902 10.161.160.83
+  port 80 tcp
+    health-check-disable
+  port 443 tcp
+    health-check-disable
+  port 15881 tcp
+    health-check-disable
+!
+slb server apia-agws-t1901 10.161.160.23
+  port 80 tcp
+    health-check-disable
+  port 443 tcp
+    health-check-disable
+  port 15881 tcp
+    health-check-disable
+!
+slb server apia-agws-t1902 10.161.160.24
+  port 80 tcp
+    health-check-disable
+  port 443 tcp
+    health-check-disable
+  port 15881 tcp
+    health-check-disable
+!
+slb server apia-agws-t1903 10.161.160.25
+  port 80 tcp
+    health-check-disable
+  port 443 tcp
+    health-check-disable
+  port 15881 tcp
+    health-check-disable
+!
+slb server apia-agws-t1904 10.161.160.26
+  port 80 tcp
+    health-check-disable
+  port 443 tcp
+    health-check-disable
+  port 15881 tcp
+    health-check-disable
+!
+slb server apia-agws-t1905 10.161.160.27
+  port 80 tcp
+    health-check-disable
+  port 443 tcp
+    health-check-disable
+  port 15881 tcp
+    health-check-disable
+!
+slb server apia-agws-t1906 10.161.160.126
+  port 80 tcp
+    health-check-disable
+  port 443 tcp
+    health-check-disable
+!
+slb server apia-agws-t1907 10.161.160.150
+  port 80 tcp
+    health-check-disable
+  port 443 tcp
+    health-check-disable
+!
+slb server apia-agws-t1908 10.161.160.158
+  port 80 tcp
+    health-check-disable
+  port 443 tcp
+    health-check-disable
+!
+slb server apia-agws-t1909 10.161.160.164
+  port 80 tcp
+    health-check-disable
+  port 443 tcp
+    health-check-disable
+  port 15881 tcp
+    health-check-disable
+!
+slb server apia-agws-t1910 10.161.160.166
+  port 80 tcp
+    health-check-disable
+  port 443 tcp
+    health-check-disable
+  port 15881 tcp
+    health-check-disable
+!
+slb server apia-agws-t1911 10.161.160.174
+  port 80 tcp
+    health-check-disable
+  port 443 tcp
+    health-check-disable
+  port 15881 tcp
+    health-check-disable
+!
+slb server apia-agws-t1912 10.161.160.179
+  port 80 tcp
+    health-check-disable
+  port 443 tcp
+    health-check-disable
+  port 15881 tcp
+    health-check-disable
+!
+slb server apia-agws-t1913 10.161.160.180
+  port 80 tcp
+    health-check-disable
+  port 443 tcp
+    health-check-disable
+  port 15881 tcp
+    health-check-disable
+!
+slb server apia-agws-t1914 10.161.160.181
+  port 80 tcp
+    health-check-disable
+  port 443 tcp
+    health-check-disable
+  port 15881 tcp
+    health-check-disable
+!
+slb server apia-agws-t1915 10.161.160.182
+  port 80 tcp
+    health-check-disable
+  port 443 tcp
+    health-check-disable
+  port 15881 tcp
+    health-check-disable
+!
+slb server apia-agws-t1916 10.161.160.183
+  port 80 tcp
+    health-check-disable
+  port 443 tcp
+    health-check-disable
+  port 15881 tcp
+    health-check-disable
+!
+slb server apia-agws-t1917 10.161.160.184
+  port 80 tcp
+    health-check-disable
+  port 443 tcp
+    health-check-disable
+  port 15881 tcp
+    health-check-disable
+!
+slb server cnfa-ctl-t1701 10.162.19.227
+  port 9292 tcp
+    health-check-disable
+!
+slb server cnfa-ctl-t1702 10.162.19.228
+  port 9292 tcp
+    health-check-disable
+!
+slb server cnfa-goblin-t1901 10.162.146.63
+  port 7080 tcp
+    health-check-disable
+!
+slb server cnfa-goblin-t1902 10.162.146.64
+  port 7080 tcp
+    health-check-disable
+!
+slb server cnfa-goblin-t1903 10.162.146.65
+  port 7080 tcp
+    health-check-disable
+!
+slb server cnfa-heatapi-t1901 10.162.146.31
+  port 8000 tcp
+    health-check-disable
+  port 8004 tcp
+    health-check-disable
+!
+slb server cnfa-heatapi-t1902 10.162.146.32
+  port 8000 tcp
+    health-check-disable
+  port 8004 tcp
+    health-check-disable
+!
+slb server cnfa-imgbld-t1701 10.162.19.231
+  port 9201 tcp
+    health-check-disable
+!
+slb server cnfa-imgbld-t1702 10.162.19.232
+  port 9201 tcp
+    health-check-disable
+!
+slb server cnfa-imgbld-t1901 10.162.146.53
+  port 9201 tcp
+    health-check-disable
+!
+slb server cnfa-imgbld-t1902 10.162.146.54
+  port 9201 tcp
+    health-check-disable
+!
+slb server cnfa-mgnapi-t1701 10.162.19.205
+  health-check-disable
+  port 9511 tcp
+    health-check-disable
+!
+slb server cnfa-mgnapi-t1702 10.162.19.244
+  port 9511 tcp
+    health-check-disable
+!
+slb server cnfa-mgnapi-t1901 10.162.146.27
+  port 9511 tcp
+    health-check-disable
+!
+slb server cnfa-mgnapi-t1902 10.162.146.28
+  port 9511 tcp
+    health-check-disable
+!
+slb server cnfa-mk8setcd-t1901 10.162.146.37
+  port 2379 tcp
+    health-check-disable
+!
+slb server cnfa-mk8setcd-t1902 10.162.146.38
+  port 2379 tcp
+    health-check-disable
+!
+slb server cnfa-mk8setcd-t1903 10.162.146.39
+  port 2379 tcp
+    health-check-disable
+!
+slb server cnfa-mk8setcd-t1904 10.162.146.40
+  port 2379 tcp
+    health-check-disable
+!
+slb server cnfa-mk8setcd-t1905 10.162.146.41
+  port 2379 tcp
+    health-check-disable
+!
+slb server cnfa-mk8smst-t1701 10.162.19.236
+  port 6443 tcp
+    health-check-disable
+!
+slb server cnfa-mk8smst-t1702 10.162.19.237
+  port 6443 tcp
+    health-check-disable
+!
+slb server cnfa-mk8smst-t1703 10.162.19.238
+  port 6443 tcp
+    health-check-disable
+!
+slb server cnfa-mk8smst-t1901 10.162.146.42
+  port 6443 tcp
+    health-check-disable
+!
+slb server cnfa-mk8smst-t1902 10.162.146.43
+  port 6443 tcp
+    health-check-disable
+!
+slb server cnfa-mk8smst-t1903 10.162.146.44
+  port 6443 tcp
+    health-check-disable
+!
+slb server cnfa-mk8swk-t1001 10.162.146.45
+  port 80 tcp
+    health-check-disable
+  port 443 tcp
+    health-check-disable
+!
+slb server cnfa-mk8swk-t1002 10.162.146.46
+  port 80 tcp
+    health-check-disable
+  port 443 tcp
+    health-check-disable
+!
+slb server cnfa-mk8swk-t1003 10.162.146.47
+  port 80 tcp
+    health-check-disable
+  port 443 tcp
+    health-check-disable
+!
+slb server cnfa-mk8swk-t1006 10.162.146.50
+  port 80 tcp
+    health-check-disable
+  port 443 tcp
+    health-check-disable
+!
+slb server cnfa-mk8swk-t1703 10.162.19.241
+  port 80 tcp
+    health-check-disable
+  port 443 tcp
+    health-check-disable
+!
+slb server cnfa-mk8swk-t1704 10.162.19.242
+  port 80 tcp
+    health-check-disable
+  port 443 tcp
+    health-check-disable
+!
+slb server cnfa-mk8swk-t1801 10.162.50.107
+  port 443 tcp
+    health-check-disable
+!
+slb server cnfa-mk8swk-t1802 10.162.50.108
+  port 443 tcp
+    health-check-disable
+!
+slb server cnfa-mk8swk-t1803 10.162.50.109
+  port 443 tcp
+    health-check-disable
+!
+slb server cnfa-usadmapi-t1801 10.162.149.135
+  port 80 tcp
+    health-check-disable
+!
+slb server cnfa-usadmapi-t1802 10.162.149.136
+  port 80 tcp
+    health-check-disable
+!
+slb server cnfa-usiaswww-t1801 10.162.149.61
+  port 10443 tcp
+    health-check-disable
+!
+slb server cnfa-usiaswww-t1802 10.162.149.62
+  port 10443 tcp
+    health-check-disable
+!
+slb server cnfa-uskeystnslv-t1801 10.162.149.69
+  port 13306 tcp
+    health-check-disable
+!
+slb server cnfa-uskeystnslv-t1802 10.162.149.70
+  port 13306 tcp
+    health-check-disable
+!
+slb server cnfias-api901 10.161.133.209
+  port 443 tcp
+    health-check-disable
+!
+slb server cnfias-api902 10.161.133.215
+  port 443 tcp
+    health-check-disable
+!
+slb server cnfias-api903 10.161.133.222
+  port 443 tcp
+    health-check-disable
+!
+slb server cnfias-api904 10.161.133.137
+  port 443 tcp
+    health-check-disable
+!
+slb server cnfias-www913 10.161.133.186
+  port 10080 tcp
+    health-check-disable
+!
+slb server cnfias-www914 10.161.133.187
+  port 10080 tcp
+    health-check-disable
+!
+slb server dova-dmsmtp-t1901 10.161.97.33
+  port 25 tcp
+    health-check-disable
+!
+slb server dova-dmsmtp-t1902 10.161.97.45
+  port 25 tcp
+    health-check-disable
+!
+slb server drca-ebs2docs-t1901 10.161.97.145
+  port 10180 tcp
+    health-check-disable
+  port 10620 tcp
+    health-check-disable
+!
+slb server drca-ebs2docs-t1902 10.161.97.146
+  port 10180 tcp
+    health-check-disable
+  port 10620 tcp
+    health-check-disable
+!
+slb server drca-ebs2docs-t1903 10.161.97.147
+  port 10180 tcp
+    health-check-disable
+  port 10620 tcp
+    health-check-disable
+!
+slb server drca-ebs2docs-t1904 10.161.97.148
+  port 10180 tcp
+    health-check-disable
+  port 10620 tcp
+    health-check-disable
+!
+slb server drca-ebs2pview-t1901 10.161.97.141
+  port 10180 tcp
+    health-check-disable
+!
+slb server drca-ebs2pview-t1902 10.161.97.142
+  port 10180 tcp
+    health-check-disable
+!
+slb server drca-ebs2pview-t1903 10.161.97.143
+  port 10180 tcp
+    health-check-disable
+!
+slb server drca-ebs2pview-t1904 10.161.97.144
+  port 10180 tcp
+    health-check-disable
+!
+slb server drca-ebs2ucpx-t1901 10.161.97.118
+  port 443 tcp
+    health-check-disable
+  port 7060 tcp
+    health-check-disable
+!
+slb server drca-ebs2ucpx-t1902 10.161.97.119
+  port 443 tcp
+    health-check-disable
+  port 7060 tcp
+    health-check-disable
+!
+slb server drca-ebs2ucpx-t1903 10.161.97.120
+  port 443 tcp
+    health-check-disable
+  port 7060 tcp
+    health-check-disable
+!
+slb server drca-ebs2ucpx-t1904 10.161.97.121
+  port 443 tcp
+    health-check-disable
+  port 7060 tcp
+    health-check-disable
+!
+slb server drca-ebs2ucpx-t1905 10.161.97.122
+  port 443 tcp
+    health-check-disable
+  port 7060 tcp
+    health-check-disable
+!
+slb server drca-ebs3docs-t1901 10.161.97.151
+  port 10180 tcp
+    health-check-disable
+  port 10620 tcp
+    health-check-disable
+!
+slb server drca-ebs3docs-t1902 10.161.97.152
+  port 10180 tcp
+    health-check-disable
+  port 10620 tcp
+    health-check-disable
+!
+slb server drca-ebs3docs-t1903 10.161.97.153
+  port 10180 tcp
+    health-check-disable
+  port 10620 tcp
+    health-check-disable
+!
+slb server drca-ebs3docs-t1904 10.161.97.154
+  port 10180 tcp
+    health-check-disable
+  port 10620 tcp
+    health-check-disable
+!
+slb server drca-ebs3pview-t1901 10.161.97.160
+  port 10180 tcp
+    health-check-disable
+!
+slb server drca-ebs3pview-t1902 10.161.97.161
+  port 10180 tcp
+    health-check-disable
+!
+slb server drca-ebs3pview-t1903 10.161.97.162
+  port 10180 tcp
+    health-check-disable
+!
+slb server drca-ebs3pview-t1904 10.161.97.163
+  port 10180 tcp
+    health-check-disable
+!
+slb server drca-ebs3ucpx-t1901 10.161.97.167
+  port 443 tcp
+    health-check-disable
+  port 7060 tcp
+    health-check-disable
+!
+slb server drca-ebs3ucpx-t1902 10.161.97.168
+  port 443 tcp
+    health-check-disable
+  port 7060 tcp
+    health-check-disable
+!
+slb server drca-ebs3ucpx-t1903 10.161.97.172
+  port 443 tcp
+    health-check-disable
+  port 7060 tcp
+    health-check-disable
+!
+slb server drca-ebs3ucpx-t1904 10.161.97.173
+  port 443 tcp
+    health-check-disable
+  port 7060 tcp
+    health-check-disable
+!
+slb server drca-ebs3ucpx-t1905 10.161.97.174
+  port 443 tcp
+    health-check-disable
+  port 7060 tcp
+    health-check-disable
+!
+slb server drca-ebs4docs-t1902 10.161.97.177
+  port 10180 tcp
+    health-check-disable
+  port 10620 tcp
+    health-check-disable
+!
+slb server drca-ebs4docs-t1903 10.161.97.178
+  port 10180 tcp
+    health-check-disable
+  port 10620 tcp
+    health-check-disable
+!
+slb server drca-ebs4docs-t1904 10.161.97.179
+  port 10180 tcp
+    health-check-disable
+  port 10620 tcp
+    health-check-disable
+!
+slb server drca-ebs4pview-t1901 10.161.97.185
+  port 10180 tcp
+    health-check-disable
+!
+slb server drca-ebs4pview-t1902 10.161.97.186
+  port 10180 tcp
+    health-check-disable
+!
+slb server drca-ebs4pview-t1903 10.161.97.187
+  port 10180 tcp
+    health-check-disable
+!
+slb server drca-ebs4pview-t1904 10.161.97.188
+  port 10180 tcp
+    health-check-disable
+!
+slb server drca-ebs5docs-t1901 10.161.119.52
+  port 10180 tcp
+    health-check-disable
+  port 10620 tcp
+    health-check-disable
+!
+slb server drca-ebs5docs-t1902 10.161.97.139
+  port 10180 tcp
+    health-check-disable
+  port 10620 tcp
+    health-check-disable
+!
+slb server drca-ebs5pview-t1901 10.161.119.60
+  health-check-disable
+  port 10180 tcp
+    health-check-disable
+!
+slb server drca-ebs5pview-t1902 10.161.97.156
+  port 10180 tcp
+    health-check-disable
+!
+slb server drca-ebs5ucpx-t1901 10.161.119.68
+  port 443 tcp
+    health-check-disable
+  port 7060 tcp
+    health-check-disable
+!
+slb server drca-ebs5ucpx-t1902 10.161.119.69
+  port 443 tcp
+    health-check-disable
+  port 7060 tcp
+    health-check-disable
+!
+slb server drca-ebs5ucpx-t1903 10.161.97.80
+  port 443 tcp
+    health-check-disable
+  port 7060 tcp
+    health-check-disable
+!
+slb server drca-ebs5ucpx-t1904 10.161.97.81
+  port 443 tcp
+    health-check-disable
+  port 7060 tcp
+    health-check-disable
+!
+slb server drca-ebs5ucpx-t1905 10.161.97.88
+  port 443 tcp
+    health-check-disable
+  port 7060 tcp
+    health-check-disable
+!
+slb server drca-ebs6docs-t1901 10.161.119.56
+  port 10180 tcp
+    health-check-disable
+  port 10620 tcp
+    health-check-disable
+!
+slb server drca-ebs6docs-t1902 10.161.119.57
+  port 10180 tcp
+    health-check-disable
+  port 10620 tcp
+    health-check-disable
+!
+slb server drca-ebs6docs-t1903 10.161.119.58
+  port 10180 tcp
+    health-check-disable
+  port 10620 tcp
+    health-check-disable
+!
+slb server drca-ebs6docs-t1904 10.161.119.59
+  port 10180 tcp
+    health-check-disable
+  port 10620 tcp
+    health-check-disable
+!
+slb server drca-ebs6pview-t1901 10.161.119.64
+  port 10180 tcp
+    health-check-disable
+!
+slb server drca-ebs6pview-t1902 10.161.119.65
+  port 10180 tcp
+    health-check-disable
+!
+slb server drca-ebs6pview-t1903 10.161.119.66
+  port 10180 tcp
+    health-check-disable
+!
+slb server drca-ebs6pview-t1904 10.161.119.67
+  port 10180 tcp
+    health-check-disable
+!
+slb server drca-storagegw-t1903 10.161.97.40
+  port 10190 tcp
+    health-check-disable
+!
+slb server drca-storagegw-t1904 10.161.97.69
+  port 10190 tcp
+    health-check-disable
+!
+slb server drca-ucdocshare-t1901 10.161.97.98
+  port 10180 tcp
+    health-check-disable
+  port 10620 tcp
+    health-check-disable
+!
+slb server drca-ucdocshare-t1902 10.161.97.101
+  port 10180 tcp
+    health-check-disable
+  port 10620 tcp
+    health-check-disable
+!
+slb server drca-ucdocshare-t1903 10.161.97.104
+  port 10180 tcp
+    health-check-disable
+  port 10620 tcp
+    health-check-disable
+!
+slb server drca-ucdocshare-t1904 10.161.97.108
+  port 10180 tcp
+    health-check-disable
+  port 10620 tcp
+    health-check-disable
+!
+slb server drca-ucpreview-t1901 10.161.97.109
+  port 10180 tcp
+    health-check-disable
+!
+slb server drca-ucpreview-t1902 10.161.97.112
+  port 10180 tcp
+    health-check-disable
+!
+slb server drca-ucpreview-t1903 10.161.97.113
+  port 10180 tcp
+    health-check-disable
+!
+slb server drca-ucpreview-t1904 10.161.97.114
+  port 10180 tcp
+    health-check-disable
+!
+slb server drca-ucpx-t1901 10.161.97.46
+  port 80 tcp
+    health-check-disable
+  port 443 tcp
+    health-check-disable
+  port 7060 tcp
+    health-check-disable
+!
+slb server drca-ucpx-t1902 10.161.97.58
+  port 80 tcp
+    health-check-disable
+  port 443 tcp
+    health-check-disable
+  port 7060 tcp
+    health-check-disable
+!
+slb server drca-ucpx-t1903 10.161.97.59
+  port 80 tcp
+    health-check-disable
+  port 443 tcp
+    health-check-disable
+  port 7060 tcp
+    health-check-disable
+!
+slb server drca-ucpx-t1904 10.161.97.62
+  port 80 tcp
+    health-check-disable
+  port 443 tcp
+    health-check-disable
+  port 7060 tcp
+    health-check-disable
+!
+slb server drca-ucpx-t1905 10.161.97.65
+  port 80 tcp
+    health-check-disable
+  port 443 tcp
+    health-check-disable
+  port 7060 tcp
+    health-check-disable
+!
+slb server drcm-newacc-t1902 10.161.127.49
+  port 13306 tcp
+    health-check-disable
+!
+slb server drcm-newacc-t1903 10.161.127.52
+  port 13306 tcp
+    health-check-disable
+!
+slb server drcm-newacc-t1904 10.161.127.97
+  port 13306 tcp
+    health-check-disable
+!
+slb server drmapp-fil901 10.161.97.84
+  port 25 tcp
+    health-check-disable
+!
+slb server drmapp-fil902 10.161.97.85
+  port 25 tcp
+    health-check-disable
+!
+slb server drmapp-fil903 10.161.97.86
+  port 25 tcp
+    health-check-disable
+!
+slb server drmm-maildb-t1901 10.161.127.128
+  port 13306 tcp
+    health-check-disable
+!
+slb server drmm-maildb-t1902 10.161.127.129
+  port 13306 tcp
+    health-check-disable
+!
+slb server drmm-maildb-t1903 10.161.127.130
+  port 13306 tcp
+    health-check-disable
+!
+slb server drmm-maildb-t1904 10.161.127.131
+  port 13306 tcp
+    health-check-disable
+!
+slb server drmm-maildb3-t1001 10.161.127.82
+  port 13306 tcp
+    health-check-disable
+!
+slb server drmm-maildb3-t1002 10.161.127.83
+  port 13306 tcp
+    health-check-disable
+!
+slb server drmm-maildb4-t1001 10.161.127.84
+  port 13306 tcp
+    health-check-disable
+!
+slb server drmm-maildb4-t1002 10.161.127.85
+  port 13306 tcp
+    health-check-disable
+!
+slb server drmm-maildb5-t1001 10.161.127.88
+  port 13306 tcp
+    health-check-disable
+!
+slb server drmm-maildb5-t1002 10.161.127.89
+  port 13306 tcp
+    health-check-disable
+!
+slb server drmm-maildb6-t1001 10.161.127.95
+  port 13306 tcp
+    health-check-disable
+!
+slb server drmm-maildb6-t1002 10.161.127.96
+  port 13306 tcp
+    health-check-disable
+!
+slb server drmm-maildb7-t1001 10.161.127.102
+  port 13306 tcp
+    health-check-disable
+!
+slb server drmm-maildb7-t1002 10.161.127.103
+  port 13306 tcp
+    health-check-disable
+!
+slb server drmm-maildb8-t1901 10.161.127.104
+  port 13306 tcp
+    health-check-disable
+!
+slb server drmm-maildb8-t1902 10.161.127.105
+  port 13306 tcp
+    health-check-disable
+!
+slb server drmm-maildbs1-t1001 10.161.127.106
+  port 13306 tcp
+    health-check-disable
+!
+slb server drmm-maildbs1-t1002 10.161.127.113
+  port 13306 tcp
+    health-check-disable
+!
+slb server drmm-maildbs2-t1001 10.161.127.114
+  port 13306 tcp
+    health-check-disable
+!
+slb server drmm-maildbs2-t1002 10.161.127.115
+  port 13306 tcp
+    health-check-disable
+!
+slb server drmmdb-mai905 10.161.127.68
+  port 13306 tcp
+    health-check-disable
+!
+slb server drmmdb-mai906 10.161.127.69
+  port 13306 tcp
+    health-check-disable
+!
+slb server drmmdb-mai907 10.161.127.70
+  port 13306 tcp
+    health-check-disable
+!
+slb server drmmdb-mai908 10.161.127.71
+  port 13306 tcp
+    health-check-disable
+!
+slb server drmmdb-mai909 10.161.127.72
+  port 13306 tcp
+    health-check-disable
+!
+slb server drmmdb-mai910 10.161.127.73
+  port 13306 tcp
+    health-check-disable
+!
+slb server drmmdb-mai911 10.161.127.74
+  port 13306 tcp
+    health-check-disable
+!
+slb server drmmdb-mai912 10.161.127.75
+  port 13306 tcp
+    health-check-disable
+!
+slb server drmmdb-mai913 10.161.127.76
+  port 13306 tcp
+    health-check-disable
+!
+slb server drmmdb-mai914 10.161.127.77
+  port 13306 tcp
+    health-check-disable
+!
+slb server drmmdb-mai915 10.161.127.78
+  port 13306 tcp
+    health-check-disable
+!
+slb server drmmdb-mai916 10.161.127.79
+  port 13306 tcp
+    health-check-disable
+!
+slb server drpm-prj2-t1901 10.161.127.35
+  port 13306 tcp
+    health-check-disable
+!
+slb server drpm-prj2-t1902 10.161.127.39
+  port 13306 tcp
+    health-check-disable
+!
+slb server drpm-prjdb1-t1902 10.161.127.139
+  port 13306 tcp
+    health-check-disable
+!
+slb server drpm-prjdb1-t1903 10.161.127.140
+  port 13306 tcp
+    health-check-disable
+!
+slb server drpm-project2-t1901 10.161.127.108
+  port 13306 tcp
+    health-check-disable
+!
+slb server drpm-project2-t1902 10.161.127.109
+  port 13306 tcp
+    health-check-disable
+!
+slb server mbra-raddrapi-t1901 10.161.161.36
+  port 10003 tcp
+    health-check-disable
+!
+slb server mbra-raddrapi-t1902 10.161.161.37
+  port 10003 tcp
+    health-check-disable
+!
+slb server nblw-rcalc-t1901 10.161.164.54
+  port 443 tcp
+    health-check-disable
+!
+slb server nblw-rcalc-t1902 10.161.164.55
+  port 443 tcp
+    health-check-disable
+!
+slb server neoa-rtkbo-t1901 10.161.161.30
+  port 5000 tcp
+    health-check-disable
+  port 5001 tcp
+    health-check-disable
+!
+slb server neoa-rtkbo-t1902 10.161.161.31
+  port 5000 tcp
+    health-check-disable
+  port 5001 tcp
+    health-check-disable
+!
+slb server neoa-rtkbo-t1903 10.161.161.32
+  port 5000 tcp
+    health-check-disable
+  port 5001 tcp
+    health-check-disable
+!
+slb server neoa-rtkbo-t1904 10.161.161.22
+  port 5000 tcp
+    health-check-disable
+  port 5001 tcp
+    health-check-disable
+!
+slb server neoa-rtkbo-t1905 10.161.161.34
+  port 5000 tcp
+    health-check-disable
+  port 5001 tcp
+    health-check-disable
+!
+slb server neoa-rtkbo-t1906 10.161.161.35
+  port 5000 tcp
+    health-check-disable
+  port 5001 tcp
+    health-check-disable
+!
+slb server neta-ds03vr02n-t1901 10.160.128.15
+  port 80 tcp
+    health-check-disable
+!
+slb server neta-netapi-t1001 10.161.147.76
+  port 80 tcp
+    health-check-disable
+!
+slb server neta-netapi-t1002 10.161.147.62
+  port 80 tcp
+    health-check-disable
+!
+slb server pbla-ncoupapi-t1901 10.161.160.35
+  port 80 tcp
+    health-check-disable
+  port 443 tcp
+    health-check-disable
+!
+slb server pbla-ncoupapi-t1902 10.161.160.36
+  port 80 tcp
+    health-check-disable
+  port 443 tcp
+    health-check-disable
+!
+slb server pbla-ncoupapi-t1903 10.161.160.37
+  port 80 tcp
+    health-check-disable
+  port 443 tcp
+    health-check-disable
+!
+slb server pbla-ncoupapi-t1904 10.161.160.38
+  port 80 tcp
+    health-check-disable
+  port 443 tcp
+    health-check-disable
+!
+slb server pbla-ncoupapi-t1905 10.161.160.39
+  port 80 tcp
+    health-check-disable
+  port 443 tcp
+    health-check-disable
+!
+slb server pbla-ncoupapi-t1906 10.161.160.40
+  port 80 tcp
+    health-check-disable
+  port 443 tcp
+    health-check-disable
+!
+slb server pinw-web-t1901 10.161.160.88
+  port 80 tcp
+    health-check-disable
+  port 443 tcp
+    health-check-disable
+!
+slb server pinw-web-t1902 10.161.160.87
+  port 80 tcp
+    health-check-disable
+  port 443 tcp
+    health-check-disable
+!
+slb server seca-esm-t1001 10.161.138.91
+  port 20514 tcp
+    health-check-disable
+  port 20514 udp
+    health-check-disable
+!
+slb server seca-esm-t1002 10.161.138.92
+  port 20514 tcp
+    health-check-disable
+  port 20514 udp
+    health-check-disable
+!
+slb server seca-esmpub-t1001 10.161.138.95
+  port 20514 tcp
+    health-check-disable
+  port 20514 udp
+    health-check-disable
+!
+slb server seca-esmpub-t1002 10.161.138.96
+  port 20514 tcp
+    health-check-disable
+  port 20514 udp
+    health-check-disable
+!
+slb server tc0a-bilbatalp-t1801 10.162.53.182
+  port 80 tcp
+    health-check-disable
+  port 443 tcp
+    health-check-disable
+!
+slb server tc0a-bilmtralp-t1801 10.162.53.183
+  port 80 tcp
+    health-check-disable
+  port 443 tcp
+    health-check-disable
+!
+slb server tc0a-cabapialp-t1801 10.162.53.184
+  port 80 tcp
+    health-check-disable
+  port 443 tcp
+    health-check-disable
+!
+slb server tc0a-cabvrfalp-t1801 10.162.53.185
+  port 80 tcp
+    health-check-disable
+  port 443 tcp
+    health-check-disable
+!
+slb server tc0a-tsmalpha-t1801 10.162.53.150
+  port 80 tcp
+    health-check-disable
+!
+slb server tc0a-tsmalpha-t1802 10.162.53.151
+  port 80 tcp
+    health-check-disable
+!
+slb server tc0w-wconalp-t1801 10.162.53.186
+  port 80 tcp
+    health-check-disable
+  port 443 tcp
+    health-check-disable
+!
+slb server tnfm-keystonedb-t1703 10.162.147.128
+  port 13306 tcp
+    health-check-disable
+!
+slb server tnfm-keystonedb-t1704 10.162.147.130
+  port 13306 tcp
+    health-check-disable
+!
+slb server tnfstg-swfpxy901 10.162.19.68
+  port 80 tcp
+    health-check-disable
+  port 443 tcp
+    health-check-disable
+!
+slb server hsnam-server 2.2.2.1
+  port 6443 tcp
+    health-check-disable
+
+slb service-group N41-vaccine-agent_tcp_4119 tcp
+  health-check TCP_4119_45.125.233.11_L2DSR
+  member SECA-DEEP-T1001 4119
+!
+slb service-group N41-vaccine-agent_tcp_4120 tcp
+  health-check TCP_4120_45.125.233.11_L2DSR
+  member SECA-DEEP-T1001 4120
+!
+slb service-group N41-vaccine-agent_tcp_4122 tcp
+  health-check TCP_4122_45.125.233.11_L2DSR
+  member SECA-DEEP-T1001 4122
+!
+slb service-group account-db-dooray_tcp_13306 tcp
+  health-check TCP_13306_10.165.130.33_L2DSR
+  member drcm-newacc-t1902 13306
+  member drcm-newacc-t1903 13306
+  member drcm-newacc-t1904 13306
+!
+slb service-group alp-kr2-registry.container.cloud.toast.com_tcp_443 tcp
+  health-check HTTP_10254_10.165.130.46_L2DSR
+  member cnfa-mk8swk-t1801 443
+  member cnfa-mk8swk-t1802 443
+  member cnfa-mk8swk-t1803 443
+!
+slb service-group api-identity-infrastructure_tcp_443 tcp
+  health-check HTTPS_443_45.125.233.12_L2DSR
+  member cnfias-api901 443
+  member cnfias-api902 443
+  member cnfias-api903 443
+  member cnfias-api904 443
+!
+slb service-group api-nesettle_tcp_443 tcp
+  health-check HTTPS_443_10.165.130.34_L2DSR
+  member nblw-rcalc-t1901 443
+  member nblw-rcalc-t1902 443
+!
+slb service-group apis.krp.toastoven_tcp_15881 tcp
+  health-check TCP_15881_45.125.233.26_L2DSR
+  member apia-agws-t1901 15881
+  member apia-agws-t1902 15881
+  member apia-agws-t1903 15881
+  member apia-agws-t1904 15881
+  member apia-agws-t1905 15881
+  member apia-agws-t1909 15881
+  member apia-agws-t1910 15881
+  member apia-agws-t1911 15881
+!
+slb service-group apis.krp.toastoven_tcp_443 tcp
+  health-check HTTPS_443_45.125.233.26_L2DSR
+  member apia-agws-t1901 443
+  member apia-agws-t1902 443
+  member apia-agws-t1903 443
+  member apia-agws-t1904 443
+  member apia-agws-t1905 443
+  member apia-agws-t1909 443
+  member apia-agws-t1910 443
+  member apia-agws-t1911 443
+!
+slb service-group apis.krp.toastoven_tcp_80 tcp
+  health-check HTTP_80_45.125.233.26_L2DSR
+  member apia-agws-t1901 80
+  member apia-agws-t1902 80
+  member apia-agws-t1903 80
+  member apia-agws-t1904 80
+  member apia-agws-t1905 80
+  member apia-agws-t1909 80
+  member apia-agws-t1910 80
+  member apia-agws-t1911 80
+!
+slb service-group apis2.krp.toastoven_tcp_443 tcp
+  health-check HTTPS_443_45.125.233.27_L2DSR
+  member apia-agws-t1906 443
+  member apia-agws-t1907 443
+  member apia-agws-t1908 443
+!
+slb service-group apis2.krp.toastoven_tcp_80 tcp
+  health-check HTTP_80_45.125.233.27_L2DSR
+  member apia-agws-t1906 80
+  member apia-agws-t1907 80
+  member apia-agws-t1908 80
+!
+slb service-group apis3.krp.toastoven.net_tcp_80 tcp
+  health-check HTTP_80_45.125.233.29_L2DSR
+  member apia-agws-t1912 80
+  member apia-agws-t1913 80
+  member apia-agws-t1914 80
+  member apia-agws-t1915 80
+  member apia-agws-t1916 80
+  member apia-agws-t1917 80
+!
+slb service-group apis3.krp.toastoven_tcp_15881 tcp
+  health-check TCP_15881_45.125.233.29_L2DSR
+  member apia-agws-t1912 15881
+  member apia-agws-t1913 15881
+  member apia-agws-t1914 15881
+  member apia-agws-t1915 15881
+  member apia-agws-t1916 15881
+  member apia-agws-t1917 15881
+!
+slb service-group apis3.krp.toastoven_tcp_443 tcp
+  health-check HTTPS_443_45.125.233.29_L2DSR
+  member apia-agws-t1912 443
+  member apia-agws-t1913 443
+  member apia-agws-t1914 443
+  member apia-agws-t1915 443
+  member apia-agws-t1916 443
+  member apia-agws-t1917 443
+!
+slb service-group beta-us-iaas-console_tcp_10443 tcp
+  health-check HTTPS_10443_10.165.130.10_L2DSR
+  member cnfa-usiaswww-t1801 10443
+  member cnfa-usiaswww-t1802 10443
+!
+slb service-group coupon-bo_tcp_443 tcp
+  health-check HTTPS_443_45.125.233.20_L2DSR
+  member pbla-ncoupapi-t1901 443
+  member pbla-ncoupapi-t1902 443
+  member pbla-ncoupapi-t1903 443
+  member pbla-ncoupapi-t1904 443
+  member pbla-ncoupapi-t1905 443
+  member pbla-ncoupapi-t1906 443
+!
+slb service-group coupon-bo_tcp_80 tcp
+  health-check HTTP_80_45.125.233.20_L2DSR
+  member pbla-ncoupapi-t1901 80
+  member pbla-ncoupapi-t1902 80
+  member pbla-ncoupapi-t1903 80
+  member pbla-ncoupapi-t1904 80
+  member pbla-ncoupapi-t1905 80
+  member pbla-ncoupapi-t1906 80
+!
+slb service-group dev-apis.krp.toastoven_tcp_15881 tcp
+  health-check TCP_15881_45.125.233.25_L2DSR
+  member apia-agdev-t1901 15881
+  member apia-agdev-t1902 15881
+!
+slb service-group dev-apis.krp.toastoven_tcp_443 tcp
+  health-check HTTP_80_45.125.233.25_L2DSR
+  member apia-agdev-t1901 443
+  member apia-agdev-t1902 443
+!
+slb service-group dev-apis.krp.toastoven_tcp_80 tcp
+  health-check HTTP_80_45.125.233.25_L2DSR
+  member apia-agdev-t1901 80
+  member apia-agdev-t1902 80
+!
+slb service-group dm2-smtp_tcp_25 tcp
+  health-check COMPOUND_10.165.130.35_L2DSR
+  member dova-dmsmtp-t1901 25
+  member dova-dmsmtp-t1902 25
+!
+slb service-group dooprjrdbsh2_tcp_13306 tcp
+  health-check TCP_13306_10.165.130.58_L2DSR
+  member drpm-prj2-t1901 13306
+  member drpm-prj2-t1902 13306
+!
+slb service-group dooraymail-db#1_tcp_13306 tcp
+  health-check TCP_13306_10.165.130.16_L2DSR
+  member drmm-maildbs1-t1001 13306
+  member drmm-maildbs1-t1002 13306
+!
+slb service-group dooraymail-db#2_tcp_13306 tcp
+  health-check TCP_13306_10.165.130.17_L2DSR
+  member drmm-maildbs2-t1001 13306
+  member drmm-maildbs2-t1002 13306
+!
+slb service-group dooraymail-db#3_tcp_13306 tcp
+  health-check TCP_13306_10.165.130.18_L2DSR
+  member drmm-maildb3-t1001 13306
+  member drmm-maildb3-t1002 13306
+!
+slb service-group dooraymail-db#4_tcp_13306 tcp
+  health-check TCP_13306_10.165.130.19_L2DSR
+  member drmm-maildb4-t1001 13306
+  member drmm-maildb4-t1002 13306
+!
+slb service-group dooraymail-db#5_tcp_13306 tcp
+  health-check TCP_13306_10.165.130.20_L2DSR
+  member drmm-maildb5-t1001 13306
+  member drmm-maildb5-t1002 13306
+!
+slb service-group dooraymail-db#6_tcp_13306 tcp
+  health-check TCP_13306_10.165.130.21_L2DSR
+  member drmm-maildb6-t1001 13306
+  member drmm-maildb6-t1002 13306
+!
+slb service-group dooraymail-db#7_tcp_13306 tcp
+  health-check TCP_13306_10.165.130.22_L2DSR
+  member drmm-maildb7-t1001 13306
+  member drmm-maildb7-t1002 13306
+!
+slb service-group dooraymail-db#8_tcp_13306 tcp
+  health-check TCP_13306_10.165.130.23_L2DSR
+  member drmm-maildb8-t1901 13306
+  member drmm-maildb8-t1902 13306
+!
+slb service-group drivestrgw2_tcp_10190 tcp
+  health-check HTTP_10190_10.165.130.48_L2DSR
+  member drca-storagegw-t1903 10190
+  member drca-storagegw-t1904 10190
+!
+slb service-group ebs1-proxy_tcp_7060 tcp
+  health-check TCP_7060_10.165.130.43_L2DSR
+  member drca-ucpx-t1901 7060
+  member drca-ucpx-t1902 7060
+  member drca-ucpx-t1903 7060
+  member drca-ucpx-t1904 7060
+  member drca-ucpx-t1905 7060
+!
+slb service-group ebs1docshare_tcp_10180 tcp
+  health-check TCP_10180_10.165.130.13_L2DSR
+  member drca-ucdocshare-t1901 10180
+  member drca-ucdocshare-t1902 10180
+  member drca-ucdocshare-t1903 10180
+  member drca-ucdocshare-t1904 10180
+!
+slb service-group ebs1docshare_tcp_10620 tcp
+  health-check TCP_10620_10.165.130.13_L2DSR
+  member drca-ucdocshare-t1901 10620
+  member drca-ucdocshare-t1902 10620
+  member drca-ucdocshare-t1903 10620
+  member drca-ucdocshare-t1904 10620
+!
+slb service-group ebs1preview_tcp_10180 tcp
+  health-check HTTP_10180_10.165.130.36_L2DSR
+  member drca-ucpreview-t1901 10180
+  member drca-ucpreview-t1902 10180
+  member drca-ucpreview-t1903 10180
+  member drca-ucpreview-t1904 10180
+!
+slb service-group ebs2-proxy_tcp_7060 tcp
+  health-check TCP_7060_10.165.130.44_L2DSR
+  member drca-ebs2ucpx-t1901 7060
+  member drca-ebs2ucpx-t1902 7060
+  member drca-ebs2ucpx-t1903 7060
+  member drca-ebs2ucpx-t1904 7060
+  member drca-ebs2ucpx-t1905 7060
+!
+slb service-group ebs2docshare_tcp_10180 tcp
+  health-check TCP_10180_10.165.130.37_L2DSR
+  member drca-ebs2docs-t1901 10180
+  member drca-ebs2docs-t1902 10180
+  member drca-ebs2docs-t1903 10180
+  member drca-ebs2docs-t1904 10180
+!
+slb service-group ebs2docshare_tcp_10620 tcp
+  health-check TCP_10620_10.165.130.37_L2DSR
+  member drca-ebs2docs-t1901 10620
+  member drca-ebs2docs-t1902 10620
+  member drca-ebs2docs-t1903 10620
+  member drca-ebs2docs-t1904 10620
+!
+slb service-group ebs2preview_tcp_10180 tcp
+  health-check HTTP_10180_10.165.130.40_L2DSR
+  member drca-ebs2pview-t1901 10180
+  member drca-ebs2pview-t1902 10180
+  member drca-ebs2pview-t1903 10180
+  member drca-ebs2pview-t1904 10180
+!
+slb service-group ebs3-proxy_tcp_7060 tcp
+  health-check TCP_7060_10.165.130.45_L2DSR
+  member drca-ebs3ucpx-t1901 7060
+  member drca-ebs3ucpx-t1902 7060
+  member drca-ebs3ucpx-t1903 7060
+  member drca-ebs3ucpx-t1904 7060
+  member drca-ebs3ucpx-t1905 7060
+!
+slb service-group ebs3docshare_tcp_10180 tcp
+  health-check TCP_10180_10.165.130.38_L2DSR
+  member drca-ebs3docs-t1901 10180
+  member drca-ebs3docs-t1902 10180
+  member drca-ebs3docs-t1903 10180
+  member drca-ebs3docs-t1904 10180
+!
+slb service-group ebs3docshare_tcp_10620 tcp
+  health-check TCP_10620_10.165.130.38_L2DSR
+  member drca-ebs3docs-t1901 10620
+  member drca-ebs3docs-t1902 10620
+  member drca-ebs3docs-t1903 10620
+  member drca-ebs3docs-t1904 10620
+!
+slb service-group ebs3preview_tcp_10180 tcp
+  health-check HTTP_10180_10.165.130.41_L2DSR
+  member drca-ebs3pview-t1901 10180
+  member drca-ebs3pview-t1902 10180
+  member drca-ebs3pview-t1903 10180
+  member drca-ebs3pview-t1904 10180
+!
+slb service-group ebs4docshare_tcp_10180 tcp
+  health-check TCP_10180_10.165.130.39_L2DSR
+  member drca-ebs4docs-t1902 10180
+  member drca-ebs4docs-t1903 10180
+  member drca-ebs4docs-t1904 10180
+!
+slb service-group ebs4docshare_tcp_10620 tcp
+  health-check TCP_10620_10.165.130.39_L2DSR
+  member drca-ebs4docs-t1902 10620
+  member drca-ebs4docs-t1903 10620
+  member drca-ebs4docs-t1904 10620
+!
+slb service-group ebs4preview_tcp_10180 tcp
+  health-check HTTP_10180_10.165.130.42_L2DSR
+  member drca-ebs4pview-t1901 10180
+  member drca-ebs4pview-t1902 10180
+  member drca-ebs4pview-t1903 10180
+  member drca-ebs4pview-t1904 10180
+!
+slb service-group ebs5-proxy_tcp_7060 tcp
+  health-check TCP_7060_10.165.130.50_L2DSR
+  member drca-ebs5ucpx-t1901 7060
+!
+slb service-group ebs5docshare_tcp_10180 tcp
+  health-check TCP_10180_10.165.130.52_L2DSR
+  member drca-ebs5docs-t1901 10180
+  member drca-ebs5docs-t1902 10180
+!
+slb service-group ebs5docshare_tcp_10620 tcp
+  health-check TCP_10620_10.165.130.52_L2DSR
+  member drca-ebs5docs-t1901 10620
+  member drca-ebs5docs-t1902 10620
+!
+slb service-group ebs5preview_tcp_10180 tcp
+  health-check TCP_10180_10.165.130.54_L2DSR
+  member drca-ebs5pview-t1901 10180
+  member drca-ebs5pview-t1902 10180
+!
+slb service-group ebs6docshare_tcp_10180 tcp
+  health-check TCP_10180_10.165.130.53_L2DSR
+  member drca-ebs6docs-t1901 10180
+  member drca-ebs6docs-t1902 10180
+  member drca-ebs6docs-t1903 10180
+  member drca-ebs6docs-t1904 10180
+!
+slb service-group ebs6docshare_tcp_10620 tcp
+  health-check TCP_10620_10.165.130.53_L2DSR
+  member drca-ebs6docs-t1901 10620
+  member drca-ebs6docs-t1902 10620
+  member drca-ebs6docs-t1903 10620
+  member drca-ebs6docs-t1904 10620
+!
+slb service-group ebs6preview_tcp_10180 tcp
+  health-check TCP_10180_10.165.130.55_L2DSR
+  member drca-ebs6pview-t1901 10180
+  member drca-ebs6pview-t1902 10180
+  member drca-ebs6pview-t1903 10180
+  member drca-ebs6pview-t1904 10180
+!
+slb service-group etcd-kr1-t1_tcp_2379 tcp
+  health-check HTTP_2379_10.165.130.31_L2DSR
+  member cnfa-mk8setcd-t1901 2379
+  member cnfa-mk8setcd-t1902 2379
+  member cnfa-mk8setcd-t1903 2379
+  member cnfa-mk8setcd-t1904 2379
+  member cnfa-mk8setcd-t1905 2379
+!
+slb service-group external-esm_tcp_20154 tcp
+  health-check TCP_20514_45.125.233.24_L2DSR
+  member seca-esm-t1001 20514
+  member seca-esm-t1002 20514
+!
+slb service-group external-esm_udp_20154 udp
+  health-check UDP_20514_45.125.233.24_L2DSR
+  member seca-esm-t1001 20514
+  member seca-esm-t1002 20514
+!
+slb service-group gov-esm_tcp_20514 tcp
+  health-check TCP_20514_45.125.233.23_L2DSR
+  member seca-esmpub-t1001 20514
+    priority 10
+  member seca-esmpub-t1002 20514
+!
+slb service-group gov-esm_udp_20514 udp
+  health-check UDP_20514_45.125.233.23_L2DSR
+  member seca-esmpub-t1001 20514
+    priority 10
+  member seca-esmpub-t1002 20514
+!
+slb service-group gwx-adlibr_tcp_443 tcp
+  health-check HTTPS_443_45.125.233.14_L2DSR
+  member adlapp-gwx901 443
+  member adlapp-gwx902 443
+  member adlapp-gwx903 443
+  member adlapp-gwx904 443
+  member adlapp-gwx905 443
+  member adlapp-gwx906 443
+  member adlapp-gwx907 443
+  member adlapp-gwx908 443
+  member adlapp-gwx909 443
+  member adlapp-gwx910 443
+  member adlapp-gwx911 443
+  member adlapp-gwx912 443
+!
+slb service-group gwx-adlibr_tcp_80 tcp
+  health-check HTTP_80_45.125.233.14_L2DSR
+  member adlapp-gwx901 80
+  member adlapp-gwx902 80
+  member adlapp-gwx903 80
+  member adlapp-gwx904 80
+  member adlapp-gwx905 80
+  member adlapp-gwx906 80
+  member adlapp-gwx907 80
+  member adlapp-gwx908 80
+  member adlapp-gwx909 80
+  member adlapp-gwx910 80
+  member adlapp-gwx911 80
+  member adlapp-gwx912 80
+!
+slb service-group heat-cfn-iaas-tcc1_tcp_8000 tcp
+  health-check TCP_8000_10.165.130.15_L2DSR
+  member cnfa-heatapi-t1901 8000
+  member cnfa-heatapi-t1902 8000
+!
+slb service-group heat.iaas-tcc1_tcp_8004 tcp
+  health-check TCP_8004_10.165.130.15_L2DSR
+  member cnfa-heatapi-t1901 8004
+  member cnfa-heatapi-t1902 8004
+!
+slb service-group kr1-api-image-builder_tcp_9201 tcp
+  health-check HTTP_9201_10.165.130.57_L2DSR
+  member cnfa-imgbld-t1901 9201
+  member cnfa-imgbld-t1902 9201
+!
+slb service-group kubernetes01_tcp_6443 tcp
+  health-check TCP_6443_10.165.130.29_L2DSR
+  member cnfa-mk8smst-t1701 6443
+  member cnfa-mk8smst-t1702 6443
+  member cnfa-mk8smst-t1703 6443
+!
+slb service-group magnum-kr1_tcp_9511 tcp
+  health-check TCP_9511_10.165.130.27_L2DSR
+  member cnfa-mgnapi-t1901 9511
+  member cnfa-mgnapi-t1902 9511
+!
+slb service-group meeting-ebs1_tcp_443 tcp
+  health-check HTTPS_443_45.125.233.16_L2DSR
+  member drca-ucpx-t1901 443
+  member drca-ucpx-t1902 443
+  member drca-ucpx-t1903 443
+  member drca-ucpx-t1904 443
+  member drca-ucpx-t1905 443
+!
+slb service-group meeting-ebs1_tcp_7060 tcp
+  health-check TCP_7060_45.125.233.16_L2DSR
+  member drca-ucpx-t1901 7060
+  member drca-ucpx-t1902 7060
+  member drca-ucpx-t1903 7060
+  member drca-ucpx-t1904 7060
+  member drca-ucpx-t1905 7060
+!
+slb service-group meeting-ebs1_tcp_80 tcp
+  health-check HTTP_80_45.125.233.16_L2DSR
+  member drca-ucpx-t1901 80
+  member drca-ucpx-t1902 80
+  member drca-ucpx-t1903 80
+  member drca-ucpx-t1904 80
+  member drca-ucpx-t1905 80
+!
+slb service-group meeting-ebs2_tcp_443 tcp
+  health-check HTTPS_443_45.125.233.17_L2DSR
+  member drca-ebs2ucpx-t1901 443
+  member drca-ebs2ucpx-t1902 443
+  member drca-ebs2ucpx-t1903 443
+  member drca-ebs2ucpx-t1904 443
+  member drca-ebs2ucpx-t1905 443
+!
+slb service-group meeting-ebs2_tcp_7060 tcp
+  health-check TCP_7060_45.125.233.17_L2DSR
+  member drca-ebs2ucpx-t1901 7060
+  member drca-ebs2ucpx-t1902 7060
+  member drca-ebs2ucpx-t1903 7060
+  member drca-ebs2ucpx-t1904 7060
+  member drca-ebs2ucpx-t1905 7060
+!
+slb service-group meeting-ebs3_tcp_443 tcp
+  health-check HTTPS_443_45.125.233.18_L2DSR
+  member drca-ebs3ucpx-t1901 443
+  member drca-ebs3ucpx-t1902 443
+  member drca-ebs3ucpx-t1903 443
+  member drca-ebs3ucpx-t1904 443
+  member drca-ebs3ucpx-t1905 443
+!
+slb service-group meeting-ebs3_tcp_7060 tcp
+  health-check TCP_7060_45.125.233.18_L2DSR
+  member drca-ebs3ucpx-t1901 7060
+  member drca-ebs3ucpx-t1902 7060
+  member drca-ebs3ucpx-t1903 7060
+  member drca-ebs3ucpx-t1904 7060
+  member drca-ebs3ucpx-t1905 7060
+!
+slb service-group meeting-ebs5_tcp_443 tcp
+  health-check HTTPS_443_45.125.233.21_L2DSR
+  member drca-ebs5ucpx-t1901 443
+!
+slb service-group meeting-ebs5_tcp_7060 tcp
+  health-check TCP_7060_45.125.233.21_L2DSR
+  member drca-ebs5ucpx-t1901 7060
+!
+slb service-group netapi_tcp_80 tcp
+  health-check TCP_80_10.165.130.49_L2DSR
+  member neta-netapi-t1001 80
+  member neta-netapi-t1002 80
+!
+slb service-group pinpoint_tcp_443 tcp
+  health-check HTTPS_443_10.165.130.25_L2DSR
+  member pinw-web-t1901 443
+  member pinw-web-t1902 443
+!
+slb service-group pinpoint_tcp_80 tcp
+  health-check HTTP_80_10.165.130.25_L2DSR
+  member pinw-web-t1901 80
+  member pinw-web-t1902 80
+!
+slb service-group pri_adclogtest2.com_tcp_80 tcp
+  health-check TCP_80_10.165.130.69_PROXY
+  member neta-ds03vr02n-t1901 80
+!
+slb service-group pri_alpha-gov-api-auth.toast.com_tcp_443 tcp
+  health-check HTTPS_443_10.165.130.26_L2DSR
+  member tc0a-cabvrfalp-t1801 443
+!
+slb service-group pri_alpha-gov-api-auth.toast.com_tcp_80 tcp
+  health-check HTTP_80_10.165.130.26_L2DSR
+  member tc0a-cabvrfalp-t1801 80
+!
+slb service-group pri_alpha-gov-billing-batch.toast.com_tcp_443 tcp
+  health-check HTTPS_443_10.165.130.62_L2DSR
+  member tc0a-bilbatalp-t1801 443
+!
+slb service-group pri_alpha-gov-billing-batch.toast.com_tcp_80 tcp
+  health-check HTTP_80_10.165.130.62_L2DSR
+  member tc0a-bilbatalp-t1801 80
+!
+slb service-group pri_alpha-gov-billing-meter.toast.com_tcp_443 tcp
+  health-check HTTPS_443_10.165.130.60_L2DSR
+  member tc0a-bilmtralp-t1801 443
+!
+slb service-group pri_alpha-gov-billing-meter.toast.com_tcp_80 tcp
+  health-check HTTP_80_10.165.130.60_L2DSR
+  member tc0a-bilmtralp-t1801 80
+!
+slb service-group pri_alpha-gov-cab.toast.com_tcp_443 tcp
+  health-check HTTPS_443_10.165.130.59_L2DSR
+  member tc0a-cabapialp-t1801 443
+!
+slb service-group pri_alpha-gov-cab.toast.com_tcp_80 tcp
+  health-check HTTP_80_10.165.130.59_L2DSR
+  member tc0a-cabapialp-t1801 80
+!
+slb service-group pri_alpha-gov-console.toast.com_tcp_443 tcp
+  health-check HTTPS_443_10.165.130.61_L2DSR
+  member tc0w-wconalp-t1801 443
+!
+slb service-group pri_alpha-gov-console.toast.com_tcp_80 tcp
+  health-check HTTP_80_10.165.130.61_L2DSR
+  member tc0w-wconalp-t1801 80
+!
+slb service-group pri_api-identity.infrastructure.cloud.toast.com_tcp_443 tcp
+  health-check HTTPS_443_10.165.130.67_L2DSR
+  member cnfias-api901 443
+  member cnfias-api902 443
+  member cnfias-api903 443
+  member cnfias-api904 443
+!
+slb service-group pri_gobin-api.kr1.toastoven.net_tcp_7080 tcp
+  health-check TCP_7080_10.165.130.63_L2DSR
+  member cnfa-goblin-t1901 7080
+  member cnfa-goblin-t1902 7080
+  member cnfa-goblin-t1903 7080
+!
+slb service-group pri_gov-alpha-sysmon-cortex.toastoven.net_tcp_80 tcp
+  health-check TCP_80_10.165.130.68_L2DSR
+  member tc0a-tsmalpha-t1801 80
+  member tc0a-tsmalpha-t1802 80
+!
+slb service-group pri_kr1-console-iaas.cloud.toastoven.net_tcp_10080 tcp
+  health-check HTTP_10080_10.165.130.14_L2DSR
+  member cnfias-www913 10080
+  member cnfias-www914 10080
+!
+slb service-group pri_kr1relinting_tcp_443 tcp
+  health-check HTTP_10254_10.165.130.64_L2DSR
+  member cnfa-mk8swk-t1006 443
+!
+slb service-group pri_kr1relinting_tcp_80 tcp
+  health-check HTTP_10254_10.165.130.64_L2DSR
+  member cnfa-mk8swk-t1006 80
+!
+slb service-group pri_ncc1-member-address.toastoven.net_tcp_10003 tcp
+  health-check HTTP_10003_10.165.130.65_L2DSR
+  member mbra-raddrapi-t1901 10003
+  member mbra-raddrapi-t1902 10003
+!
+slb service-group pri_ncc1-ticketlink-neoid-bo.payco.com_tcp_5000 tcp
+  health-check TCP_5000_10.165.130.24_L2DSR
+  member neoa-rtkbo-t1901 5000
+  member neoa-rtkbo-t1902 5000
+  member neoa-rtkbo-t1903 5000
+  member neoa-rtkbo-t1904 5000
+  member neoa-rtkbo-t1905 5000
+  member neoa-rtkbo-t1906 5000
+!
+slb service-group pri_ncc1-ticketlink-neoid-bo.payco.com_tcp_5001 tcp
+  health-check HTTP_5001_10.165.130.24_L2DSR
+  member neoa-rtkbo-t1901 5001
+  member neoa-rtkbo-t1902 5001
+  member neoa-rtkbo-t1903 5001
+  member neoa-rtkbo-t1904 5001
+  member neoa-rtkbo-t1905 5001
+  member neoa-rtkbo-t1906 5001
+!
+slb service-group pri_stg-discovery-etcd-kr1.cloud.toastoven.net_tcp_443 tcp
+  health-check HTTP_10254_10.165.130.66_L2DSR
+  member cnfa-mk8swk-t1703 443
+  member cnfa-mk8swk-t1704 443
+!
+slb service-group pri_stg-discovery-etcd-kr1.cloud.toastoven.net_tcp_80 tcp
+  health-check HTTP_10254_10.165.130.66_L2DSR
+  member cnfa-mk8swk-t1703 80
+  member cnfa-mk8swk-t1704 80
+!
+slb service-group proxyprotocol_tcp_443 tcp
+  member DUT#01 443
+!
+slb service-group proxyprotocol_tcp_80 tcp
+  member DUT#01 80
+!
+slb service-group pub_kr1relexting_tcp_443 tcp
+  health-check HTTP_10254_45.125.233.30_L2DSR
+  member cnfa-mk8swk-t1001 443
+  member cnfa-mk8swk-t1002 443
+  member cnfa-mk8swk-t1003 443
+!
+slb service-group pub_kr1relexting_tcp_80 tcp
+  health-check HTTP_10254_45.125.233.30_L2DSR
+  member cnfa-mk8swk-t1001 80
+  member cnfa-mk8swk-t1002 80
+  member cnfa-mk8swk-t1003 80
+!
+slb service-group send.dooray.com_tcp_25 tcp
+  health-check TCP_25_10.165.130.51_L2DSR
+  member drmapp-fil901 25
+  member drmapp-fil902 25
+  member drmapp-fil903 25
+!
+slb service-group stg-admin-api-iaas-us1_tcp_80 tcp
+  health-check HTTP_80_10.165.130.11_L2DSR
+  member cnfa-usadmapi-t1801 80
+  member cnfa-usadmapi-t1802 80
+!
+slb service-group stg-api-storage_tcp_443 tcp
+  health-check HTTPS_443_45.125.233.13_L2DSR
+  member tnfstg-swfpxy901 443
+!
+slb service-group stg-api-storage_tcp_80 tcp
+  health-check HTTP_80_45.125.233.13_L2DSR
+  member tnfstg-swfpxy901 80
+!
+slb service-group stg-keystone-db-iaas-us1_tcp_13306 tcp
+  health-check TCP_13306_10.165.130.12_L2DSR
+  member cnfa-uskeystnslv-t1801 13306
+  member cnfa-uskeystnslv-t1802 13306
+!
+slb service-group stg-keystone-db_tcp_13306 tcp
+  health-check TCP_13306_10.165.130.47_PROXY
+  member tnfm-keystonedb-t1703 13306
+  member tnfm-keystonedb-t1704 13306
+!
+slb service-group stg-kr1-api-image-builder_tcp_9201 tcp
+  health-check HTTP_9201_10.165.130.56_L2DSR
+  member cnfa-imgbld-t1701 9201
+  member cnfa-imgbld-t1702 9201
+!
+slb service-group stg-magnum-kr1_tcp_9511 tcp
+  health-check TCP_9511_10.165.130.30_L2DSR
+  member cnfa-mgnapi-t1701 9511
+  member cnfa-mgnapi-t1702 9511
+!
+slb service-group tmp-stg-glance_tcp_9292 tcp
+  health-check TCP_9292_45.125.233.15_PROXY
+  member cnfa-ctl-t1701 9292
+  member cnfa-ctl-t1702 9292
+!
+slb service-group toast_cloud_kubernetes_tcp_6443 tcp
+  health-check TCP_6443_10.165.130.28_L2DSR
+  member cnfa-mk8smst-t1901 6443
+  member cnfa-mk8smst-t1902 6443
+  member cnfa-mk8smst-t1903 6443
+!
+
+slb service-group hsnam_tcp_6443 tcp
+  health-check TCP_6443_10.165.130.28_L2DSR
+  member hsnam-server 6443
+
+slb template client-ssl *.payco.com
+  ca-cert Sectigo_RootCA_Bundle
+  cert *.payco.com_cert
+  key *.payco.com_key pass-phrase encrypted CHbwrEmp5YNckLx1X0AfAemyPso+nsoOOHesOMXDJzqXpB4vRSYmVOIiJUNuNSxV
+  disable-sslv3
+!
+slb template tcp IDLETIMEOUT-SESSION-FLUSH
+  idle-timeout 1800
+  del-session-on-server-down
+!
+slb template http X-Forwarded-For
+  insert-client-ip X-Forwarded-For
+!
+slb virtual-server N41-vaccine-agent_L2DSR 45.125.233.11
+  vrid 1
+  port 4119 tcp
+    ha-conn-mirror
+    service-group N41-vaccine-agent_tcp_4119
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+  port 4120 tcp
+    ha-conn-mirror
+    service-group N41-vaccine-agent_tcp_4120
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+  port 4122 tcp
+    ha-conn-mirror
+    service-group N41-vaccine-agent_tcp_4122
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+!
+slb virtual-server account-db.dooray_L2DSR 10.165.130.33
+  vrid 1
+  port 13306 tcp
+    ha-conn-mirror
+    service-group account-db-dooray_tcp_13306
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+!
+slb virtual-server alp-kr2-registry.container.cloud.toast.com_L2DSR 10.165.130.46
+  vrid 1
+  port 443 tcp
+    ha-conn-mirror
+    service-group alp-kr2-registry.container.cloud.toast.com_tcp_443
+    no-dest-nat
+!
+slb virtual-server api-identity.infrastructure.cloud.toast.com_L2DSR 45.125.233.12
+  vrid 1
+  port 443 tcp
+    ha-conn-mirror
+    service-group api-identity-infrastructure_tcp_443
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+!
+slb virtual-server api-nesettle.hangame.com_L2DSR 10.165.130.34
+  vrid 1
+  port 443 tcp
+    ha-conn-mirror
+    service-group api-nesettle_tcp_443
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+!
+slb virtual-server apis.krp.toastoven.net_L2DSR 45.125.233.26
+  vrid 1
+  port 80 tcp
+    ha-conn-mirror
+    service-group apis.krp.toastoven_tcp_80
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+  port 443 tcp
+    ha-conn-mirror
+    service-group apis.krp.toastoven_tcp_443
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+  port 15881 tcp
+    ha-conn-mirror
+    service-group apis.krp.toastoven_tcp_15881
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+!
+slb virtual-server apis2.krp.toastoven.net_L2DSR 45.125.233.27
+  vrid 1
+  port 80 tcp
+    ha-conn-mirror
+    service-group apis2.krp.toastoven_tcp_80
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+  port 443 tcp
+    ha-conn-mirror
+    service-group apis2.krp.toastoven_tcp_443
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+!
+slb virtual-server apis3.krp.toastoven.net_L2DSR 45.125.233.29
+  vrid 1
+  port 80 tcp
+    ha-conn-mirror
+    service-group apis3.krp.toastoven.net_tcp_80
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+  port 443 tcp
+    ha-conn-mirror
+    service-group apis3.krp.toastoven_tcp_443
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+  port 15881 tcp
+    ha-conn-mirror
+    service-group apis3.krp.toastoven_tcp_15881
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+!
+slb virtual-server beta-us-iaas-console.toast.com_L2DSR 10.165.130.10
+  vrid 1
+  port 10443 tcp
+    ha-conn-mirror
+    service-group beta-us-iaas-console_tcp_10443
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+!
+slb virtual-server coupon-bo.payco.com_L2DSR 45.125.233.20
+  vrid 1
+  port 80 tcp
+    ha-conn-mirror
+    service-group coupon-bo_tcp_80
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+  port 443 tcp
+    ha-conn-mirror
+    service-group coupon-bo_tcp_443
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+!
+slb virtual-server dev-apis.krp.toastoven.net_L2DSR 45.125.233.25
+  vrid 1
+  port 80 tcp
+    ha-conn-mirror
+    service-group dev-apis.krp.toastoven_tcp_80
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+  port 443 tcp
+    ha-conn-mirror
+    service-group dev-apis.krp.toastoven_tcp_443
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+  port 15881 tcp
+    ha-conn-mirror
+    service-group dev-apis.krp.toastoven_tcp_15881
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+!
+slb virtual-server dm2.smtp.toastcloud.com_L2DSR 10.165.130.35
+  vrid 1
+  port 25 tcp
+    ha-conn-mirror
+    service-group dm2-smtp_tcp_25
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+!
+slb virtual-server dooprjrdbsh2.dooray.com_L2DSR 10.165.130.58
+  vrid 1
+  port 13306 tcp
+    ha-conn-mirror
+    service-group dooprjrdbsh2_tcp_13306
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+!
+slb virtual-server dooraymail-db#1_L2DSR 10.165.130.16
+  vrid 1
+  port 13306 tcp
+    ha-conn-mirror
+    service-group dooraymail-db#1_tcp_13306
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+!
+slb virtual-server dooraymail-db#2_L2DSR 10.165.130.17
+  vrid 1
+  port 13306 tcp
+    ha-conn-mirror
+    service-group dooraymail-db#2_tcp_13306
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+!
+slb virtual-server dooraymail-db#3_L2DSR 10.165.130.18
+  vrid 1
+  port 13306 tcp
+    ha-conn-mirror
+    service-group dooraymail-db#3_tcp_13306
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+!
+slb virtual-server dooraymail-db#4_L2DSR 10.165.130.19
+  vrid 1
+  port 13306 tcp
+    ha-conn-mirror
+    service-group dooraymail-db#4_tcp_13306
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+!
+slb virtual-server dooraymail-db#5_L2DSR 10.165.130.20
+  vrid 1
+  port 13306 tcp
+    ha-conn-mirror
+    service-group dooraymail-db#5_tcp_13306
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+!
+slb virtual-server dooraymail-db#6_L2DSR 10.165.130.21
+  vrid 1
+  port 13306 tcp
+    ha-conn-mirror
+    service-group dooraymail-db#6_tcp_13306
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+!
+slb virtual-server dooraymail-db#7_L2DSR 10.165.130.22
+  vrid 1
+  port 13306 tcp
+    ha-conn-mirror
+    service-group dooraymail-db#7_tcp_13306
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+!
+slb virtual-server dooraymail-db#8_L2DSR 10.165.130.23
+  vrid 1
+  port 13306 tcp
+    ha-conn-mirror
+    service-group dooraymail-db#8_tcp_13306
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+!
+slb virtual-server drivestrgw2_L2DSR 10.165.130.48
+  vrid 1
+  port 10190 tcp
+    ha-conn-mirror
+    service-group drivestrgw2_tcp_10190
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+!
+slb virtual-server ebs1-proxy_L2DSR 10.165.130.43
+  vrid 1
+  port 7060 tcp
+    ha-conn-mirror
+    service-group ebs1-proxy_tcp_7060
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+!
+slb virtual-server ebs1docshare_L2DSR 10.165.130.13
+  vrid 1
+  port 10180 tcp
+    ha-conn-mirror
+    service-group ebs1docshare_tcp_10180
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+  port 10620 tcp
+    ha-conn-mirror
+    service-group ebs1docshare_tcp_10620
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+!
+slb virtual-server ebs1preview_L2DSR 10.165.130.36
+  vrid 1
+  port 10180 tcp
+    ha-conn-mirror
+    service-group ebs1preview_tcp_10180
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+!
+slb virtual-server ebs2-proxy_L2DSR 10.165.130.44
+  vrid 1
+  port 7060 tcp
+    ha-conn-mirror
+    service-group ebs2-proxy_tcp_7060
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+!
+slb virtual-server ebs2docshare_L2DSR 10.165.130.37
+  vrid 1
+  port 10180 tcp
+    ha-conn-mirror
+    service-group ebs2docshare_tcp_10180
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+  port 10620 tcp
+    ha-conn-mirror
+    service-group ebs2docshare_tcp_10620
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+!
+slb virtual-server ebs2preview_L2DSR 10.165.130.40
+  vrid 1
+  port 10180 tcp
+    ha-conn-mirror
+    service-group ebs2preview_tcp_10180
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+!
+slb virtual-server ebs3-proxy_L2DSR 10.165.130.45
+  vrid 1
+  port 7060 tcp
+    ha-conn-mirror
+    service-group ebs3-proxy_tcp_7060
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+!
+slb virtual-server ebs3docshare_L2DSR 10.165.130.38
+  vrid 1
+  port 10180 tcp
+    ha-conn-mirror
+    service-group ebs3docshare_tcp_10180
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+  port 10620 tcp
+    ha-conn-mirror
+    service-group ebs3docshare_tcp_10620
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+!
+slb virtual-server ebs3preview_L2DSR 10.165.130.41
+  vrid 1
+  port 10180 tcp
+    ha-conn-mirror
+    service-group ebs3preview_tcp_10180
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+!
+slb virtual-server ebs4docshare_L2DSR 10.165.130.39
+  vrid 1
+  port 10180 tcp
+    ha-conn-mirror
+    service-group ebs4docshare_tcp_10180
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+  port 10620 tcp
+    ha-conn-mirror
+    service-group ebs4docshare_tcp_10620
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+!
+slb virtual-server ebs4preview_L2DSR 10.165.130.42
+  vrid 1
+  port 10180 tcp
+    ha-conn-mirror
+    service-group ebs4preview_tcp_10180
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+!
+slb virtual-server ebs5-proxy_L2DSR 10.165.130.50
+  vrid 1
+  port 7060 tcp
+    ha-conn-mirror
+    service-group ebs5-proxy_tcp_7060
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+!
+slb virtual-server ebs5docshare_L2DSR 10.165.130.52
+  vrid 1
+  port 10180 tcp
+    ha-conn-mirror
+    service-group ebs5docshare_tcp_10180
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+  port 10620 tcp
+    ha-conn-mirror
+    service-group ebs5docshare_tcp_10620
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+!
+slb virtual-server ebs5preview_L2DSR 10.165.130.54
+  vrid 1
+  port 10180 tcp
+    ha-conn-mirror
+    service-group ebs5preview_tcp_10180
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+!
+slb virtual-server ebs6docshare_L2DSR 10.165.130.53
+  vrid 1
+  port 10180 tcp
+    ha-conn-mirror
+    service-group ebs6docshare_tcp_10180
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+  port 10620 tcp
+    ha-conn-mirror
+    service-group ebs6docshare_tcp_10620
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+!
+slb virtual-server ebs6preview_L2DSR 10.165.130.55
+  vrid 1
+  port 10180 tcp
+    ha-conn-mirror
+    service-group ebs6preview_tcp_10180
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+!
+slb virtual-server etcd-kr1-t1.cloud.toastoven.net_L2DSR 10.165.130.31
+  vrid 1
+  port 2379 tcp
+    ha-conn-mirror
+    service-group etcd-kr1-t1_tcp_2379
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+!
+slb virtual-server external-esm_L2DSR 45.125.233.24
+  vrid 1
+  port 20514 tcp
+    ha-conn-mirror
+    service-group external-esm_tcp_20154
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+  port 20514 udp
+    ha-conn-mirror
+    service-group external-esm_udp_20154
+    no-dest-nat
+!
+slb virtual-server gov-esm_L2DSR 45.125.233.23
+  vrid 1
+  port 20514 tcp
+    ha-conn-mirror
+    service-group gov-esm_tcp_20514
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+  port 20514 udp
+    ha-conn-mirror
+    service-group gov-esm_udp_20514
+    no-dest-nat
+!
+slb virtual-server gwx.adlibr.com_L2DSR 45.125.233.14
+  vrid 1
+  port 80 tcp
+    ha-conn-mirror
+    service-group gwx-adlibr_tcp_80
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+  port 443 tcp
+    ha-conn-mirror
+    service-group gwx-adlibr_tcp_443
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+!
+slb virtual-server heat.iaas.tcc1.cloud.toastoven.net_L2DSR 10.165.130.15
+  vrid 1
+  port 8000 tcp
+    ha-conn-mirror
+    service-group heat-cfn-iaas-tcc1_tcp_8000
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+  port 8004 tcp
+    ha-conn-mirror
+    service-group heat.iaas-tcc1_tcp_8004
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+!
+slb virtual-server kr1-api-image-builder.cloud.toast.com_L2DSR 10.165.130.57
+  vrid 1
+  port 9201 tcp
+    ha-conn-mirror
+    service-group kr1-api-image-builder_tcp_9201
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+!
+slb virtual-server kubernetes01_L2DSR 10.165.130.29
+  vrid 1
+  port 6443 tcp
+    ha-conn-mirror
+    service-group kubernetes01_tcp_6443
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+!
+slb virtual-server magnum-kr1.cloud.toastoven.net_L2DSR 10.165.130.27
+  vrid 1
+  port 9511 tcp
+    ha-conn-mirror
+    service-group magnum-kr1_tcp_9511
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+!
+slb virtual-server meeting-ebs1_L2DSR 45.125.233.16
+  vrid 1
+  port 80 tcp
+    ha-conn-mirror
+    service-group meeting-ebs1_tcp_80
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+  port 443 tcp
+    ha-conn-mirror
+    service-group meeting-ebs1_tcp_443
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+  port 7060 tcp
+    ha-conn-mirror
+    service-group meeting-ebs1_tcp_7060
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+!
+slb virtual-server meeting-ebs2_L2DSR 45.125.233.17
+  vrid 1
+  port 443 tcp
+    ha-conn-mirror
+    service-group meeting-ebs2_tcp_443
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+  port 7060 tcp
+    ha-conn-mirror
+    service-group meeting-ebs2_tcp_7060
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+!
+slb virtual-server meeting-ebs3_L2DSR 45.125.233.18
+  vrid 1
+  port 443 tcp
+    ha-conn-mirror
+    service-group meeting-ebs3_tcp_443
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+  port 7060 tcp
+    ha-conn-mirror
+    service-group meeting-ebs3_tcp_7060
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+!
+slb virtual-server meeting-ebs5_L2DSR 45.125.233.21
+  vrid 1
+  port 443 tcp
+    ha-conn-mirror
+    service-group meeting-ebs5_tcp_443
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+  port 7060 tcp
+    ha-conn-mirror
+    service-group meeting-ebs5_tcp_7060
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+!
+slb virtual-server netapi.nhn.com_L2DSR 10.165.130.49
+  vrid 1
+  port 80 tcp
+    ha-conn-mirror
+    service-group netapi_tcp_80
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+!
+slb virtual-server pinpoint.nhn.com_L2DSR 10.165.130.25
+  vrid 1
+  port 80 tcp
+    ha-conn-mirror
+    service-group pinpoint_tcp_80
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+  port 443 tcp
+    ha-conn-mirror
+    service-group pinpoint_tcp_443
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+!
+slb virtual-server pri_adclogtest2.com_PROXY 10.165.130.69
+  vrid 1
+  port 80 tcp
+    ha-conn-mirror
+    source-nat pool SNAT-PP
+    service-group pri_adclogtest2.com_tcp_80
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+!
+slb virtual-server pri_alpha-gov-api-auth.toast.com_L2DSR 10.165.130.26
+  vrid 1
+  port 80 tcp
+    ha-conn-mirror
+    service-group pri_alpha-gov-api-auth.toast.com_tcp_80
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+  port 443 tcp
+    ha-conn-mirror
+    service-group pri_alpha-gov-api-auth.toast.com_tcp_443
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+!
+slb virtual-server pri_alpha-gov-billing-batch.toast.com_L2DSR 10.165.130.62
+  vrid 1
+  port 80 tcp
+    ha-conn-mirror
+    service-group pri_alpha-gov-billing-batch.toast.com_tcp_80
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+  port 443 tcp
+    ha-conn-mirror
+    service-group pri_alpha-gov-billing-batch.toast.com_tcp_443
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+!
+slb virtual-server pri_alpha-gov-billing-meter.toast.com_L2DSR 10.165.130.60
+  vrid 1
+  port 80 tcp
+    ha-conn-mirror
+    service-group pri_alpha-gov-billing-meter.toast.com_tcp_80
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+  port 443 tcp
+    ha-conn-mirror
+    service-group pri_alpha-gov-billing-meter.toast.com_tcp_443
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+!
+slb virtual-server pri_alpha-gov-cab.toast.com_L2DSR 10.165.130.59
+  vrid 1
+  port 80 tcp
+    ha-conn-mirror
+    service-group pri_alpha-gov-cab.toast.com_tcp_80
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+  port 443 tcp
+    ha-conn-mirror
+    service-group pri_alpha-gov-cab.toast.com_tcp_443
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+!
+slb virtual-server pri_alpha-gov-console.toast.com_L2DSR 10.165.130.61
+  vrid 1
+  port 80 tcp
+    ha-conn-mirror
+    service-group pri_alpha-gov-console.toast.com_tcp_80
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+  port 443 tcp
+    ha-conn-mirror
+    service-group pri_alpha-gov-console.toast.com_tcp_443
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+!
+slb virtual-server pri_api-identity.infrastructure.cloud.toast.com_L2DSR 10.165.130.67
+  vrid 1
+  port 443 tcp
+    ha-conn-mirror
+    service-group pri_api-identity.infrastructure.cloud.toast.com_tcp_443
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+!
+slb virtual-server pri_gobin-api.kr1.toastoven.net_L2DSR 10.165.130.63
+  vrid 1
+  port 7080 tcp
+    ha-conn-mirror
+    service-group pri_gobin-api.kr1.toastoven.net_tcp_7080
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+!
+slb virtual-server pri_gov-alpha-sysmon-cortex.toastoven.net_L2DSR 10.165.130.68
+  vrid 1
+  port 80 tcp
+    ha-conn-mirror
+    service-group pri_gov-alpha-sysmon-cortex.toastoven.net_tcp_80
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+!
+slb virtual-server pri_kr1-console-iaas.cloud.toastoven.net_L2DSR 10.165.130.14
+  vrid 1
+  port 10080 tcp
+    ha-conn-mirror
+    service-group pri_kr1-console-iaas.cloud.toastoven.net_tcp_10080
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+!
+slb virtual-server pri_kr1relinting_L2DSR 10.165.130.64
+  vrid 1
+  port 80 tcp
+    ha-conn-mirror
+    service-group pri_kr1relinting_tcp_80
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+  port 443 tcp
+    ha-conn-mirror
+    service-group pri_kr1relinting_tcp_443
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+!
+slb virtual-server pri_ncc1-member-address.toastoven.net_L2DSR 10.165.130.65
+  vrid 1
+  port 10003 tcp
+    service-group pri_ncc1-member-address.toastoven.net_tcp_10003
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+!
+slb virtual-server pri_ncc1-ticketlink-neoid-bo.payco.com_L2DSR 10.165.130.24
+  vrid 1
+  port 5000 tcp
+    ha-conn-mirror
+    service-group pri_ncc1-ticketlink-neoid-bo.payco.com_tcp_5000
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+  port 5001 tcp
+    ha-conn-mirror
+    service-group pri_ncc1-ticketlink-neoid-bo.payco.com_tcp_5001
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+!
+slb virtual-server pri_send.dooray.com_L2DSR 10.165.130.51
+  vrid 1
+  port 25 tcp
+    ha-conn-mirror
+    service-group send.dooray.com_tcp_25
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+!
+slb virtual-server pri_stg-discovery-etcd-kr1.cloud.toastoven.net_L2DSR 10.165.130.66
+  vrid 1
+  port 80 tcp
+    ha-conn-mirror
+    service-group pri_stg-discovery-etcd-kr1.cloud.toastoven.net_tcp_80
+    no-dest-nat
+  port 443 tcp
+    ha-conn-mirror
+    service-group pri_stg-discovery-etcd-kr1.cloud.toastoven.net_tcp_443
+    no-dest-nat
+!
+slb virtual-server proxyprotocol_PROXY 10.165.130.32
+  vrid 1
+  port 80 tcp
+    ha-conn-mirror
+    aflex proxyprotocol_insert
+    source-nat pool SNAT-PP
+    service-group proxyprotocol_tcp_80
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+  port 443 tcp-proxy
+    aflex proxyprotocol
+    source-nat pool SNAT-PP
+    service-group proxyprotocol_tcp_443
+!
+slb virtual-server pub_kr1relexting_L2DSR 45.125.233.30
+  vrid 1
+  port 80 tcp
+    ha-conn-mirror
+    service-group pub_kr1relexting_tcp_80
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+  port 443 tcp
+    ha-conn-mirror
+    service-group pub_kr1relexting_tcp_443
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+!
+slb virtual-server stg-admin-api.iaas.us1.cloud.toastoven.net_L2DSR 10.165.130.11
+  vrid 1
+  port 80 tcp
+    ha-conn-mirror
+    service-group stg-admin-api-iaas-us1_tcp_80
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+!
+slb virtual-server stg-api-storage.cloud.toast.com_L2DSR 45.125.233.13
+  vrid 1
+  port 80 tcp
+    ha-conn-mirror
+    service-group stg-api-storage_tcp_80
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+  port 443 tcp
+    ha-conn-mirror
+    service-group stg-api-storage_tcp_443
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+!
+slb virtual-server stg-keystone-db.iaas.kr2.cloud.toastoven.net_PROXY 10.165.130.47
+  vrid 1
+  port 13306 tcp
+    source-nat pool SNAT-PP
+    service-group stg-keystone-db_tcp_13306
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+!
+slb virtual-server stg-keystone-db.iaas.us1.cloud.toastoven.net_L2DSR 10.165.130.12
+  vrid 1
+  port 13306 tcp
+    ha-conn-mirror
+    service-group stg-keystone-db-iaas-us1_tcp_13306
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+!
+slb virtual-server stg-kr1-api-image-builder.cloud.toast.com_L2DSR 10.165.130.56
+  vrid 1
+  port 9201 tcp
+    ha-conn-mirror
+    service-group stg-kr1-api-image-builder_tcp_9201
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+!
+slb virtual-server stg-magnum-kr1.cloud.toastoven.net_L2DSR 10.165.130.30
+  vrid 1
+  port 9511 tcp
+    ha-conn-mirror
+    service-group stg-magnum-kr1_tcp_9511
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+!
+slb virtual-server tmp-stg-glance.iaas.tcc1.cloud.toastoven.net_PROXY 45.125.233.15
+  vrid 1
+  port 80 http
+    source-nat pool SNAT-PP
+    service-group tmp-stg-glance_tcp_9292
+    template http X-Forwarded-For
+!
+slb virtual-server toast_cloud_kubernetes_L2DSR 10.165.130.28
+  vrid 1
+  port 6443 tcp
+    ha-conn-mirror
+    service-group toast_cloud_kubernetes_tcp_6443
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+
+slb virtual-server hsnam_vip_L2DSR 1.1.1.1
+  vrid 1
+  port 443 tcp
+    ha-conn-mirror
+    service-group 
+    template tcp IDLETIMEOUT-SESSION-FLUSH
+    no-dest-nat
+!
+
+logging syslog information
+!
+logging host 10.161.135.36 use-mgmt-port
+!
+logging host 10.170.72.23 use-mgmt-port
+!
+sflow setting local-collection
+!
+sflow collector ip 127.0.0.1 6343
+!
+snmp-server SNMPv1-v2c user user0
+  community read encrypted fkKuv/x5kMXTbPeEi8EVKX3N3N7JHrZzSkZXRXIDddbeTLaVhH63xWz4Un7iy6Qh
+  remote 10.60.9.244 255.255.255.255
+  remote 10.60.9.245 255.255.255.255
+  remote 10.60.9.246 255.255.255.255
+  remote 10.60.9.247 255.255.255.255
+  remote 10.60.7.247 255.255.255.255
+  remote 10.60.9.180 255.255.255.255
+  remote 10.60.9.218 255.255.255.255
+  remote 10.60.9.219 255.255.255.255
+!
+snmp-server enable service
+!
+!
+end
+
+
+
+

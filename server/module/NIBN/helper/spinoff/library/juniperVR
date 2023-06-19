@@ -1,0 +1,15 @@
+VR||set routing-instances||0
+VR||set routing-instances||2(key)
+VR||set routing-instances,routing-options,router-id||2(key),4,5
+VR||set routing-instances,routing-options,autonomous-system||2(key),4,5
+VR||set routing-instances,routing-options,static route,next-hop||2(key),4,5,6,7,8
+VR||set routing-instances,routing-options,static route,qualified-next-hop,metric||2(key),4,5,6,7,8,10
+VR||set routing-instances,protocols,bgp group,type||2(key),6,8
+VR||set routing-instances,protocols,bgp group,multipath||2(key),6,7
+VR||set routing-instances,protocols,bgp group||2(key),6,7
+VR||set routing-instances,protocols,bgp group,neighbor,description||2(key),6,7,8,11
+VR||set routing-instances,protocols,bgp group,neighbor||2(key),6,7,8,9
+VR||set routing-instances,protocols,bgp group,neighbor,import||2(key),6,7,8,10
+VR||set routing-instances,protocols,bgp group,neighbor,export||2(key),6,7,8,10
+VR||set routing-instances,protocols,bgp group,neighbor,peer-as||2(key),6,7,8,9,10
+VR||set routing-instances,interface||2(key),3,4

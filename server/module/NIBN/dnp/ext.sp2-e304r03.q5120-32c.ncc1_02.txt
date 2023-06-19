@@ -1,0 +1,25 @@
+﻿Last login: Mon Feb 13 14:18:17 2023 from 10.77.120.145
+--- JUNOS 18.4R2-S3 Kernel 64-bit  JNPR-11.0-20191223.5f5c7dc_buil
+
+{master:0}
+icraft@gw.bds1-w103r05.q5110-48s.tcc1> 
+
+{master:0}
+icraft@gw.bds1-w103r05.q5110-48s.tcc1> ssh 10.62.225.6 source 10.60.1.1 
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@    WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!     @
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+IT IS POSSIBLE THAT SOMEONE IS DOING SOMETHING NASTY!
+Someone could be eavesdropping on you right now (man-in-the-middle attack)!
+It is also possible that a host key has just been changed.
+The fingerprint for the RSA key sent by the remote host is
+SHA256:4S9yiAGCsrnLaNBosx+iZ3c/LBKH0qjfyW19zBgDS/c.
+Please contact your system administrator.
+Add correct host key in /var/home/icraft/.ssh/known_hosts to get rid of this message.
+Offending ECDSA key in /var/home/icraft/.ssh/known_hosts:125
+RSA host key for 10.62.225.6 has changed and you have requested strict checking.
+Host key verification failed.
+
+{master:0}
+icraft@gw.bds1-w103r05.q5110-48s.tcc1> exit  
+

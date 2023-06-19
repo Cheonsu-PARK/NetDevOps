@@ -1,0 +1,130 @@
+set system host-name pub.sp2
+set system time-zone Asia/Seoul
+set system ntp server 10.60.1.1 prefer
+set system ntp server 10.60.1.2
+set system ntp server 10.60.1.3
+set system services ssh
+set system authentication-order tacplus
+set system root-authentication encrypted-password $5$4QwVrIyP$y54N59d3j9su4sfkrVrkljnJKzvU1dzhdicJ.yGC9f/
+set system tacplus-server 10.77.122.200 secret $9$gg4JD.PQ3nCq.0BEhrlKMW8L7Vbs
+set system tacplus-server 10.77.122.200 timeout 1
+set system tacplus-server 10.77.122.200 single-connection
+set system tacplus-server 10.77.122.200 source-address 10.60.236.106
+set system accounting destination tacplus server 10.77.122.200 secret $9$K59v87wYoZGibwmfzF/9Apu0OIcSr
+set system accounting destination tacplus server 10.77.122.200 timeout 1
+set system accounting destination tacplus server 10.77.122.200 single-connection
+set system accounting destination tacplus server 10.77.122.200 source-address 10.60.236.106
+set system accounting events login
+set system accounting events interactive-commands
+deactivate system scripts commit file denyconfig.slax
+set system login class superuser-local idle-timeout 30
+set system login class superuser-local permissions all
+set system login user icraft uid 2004
+set system login user icraft class superuser-local
+set system login user icraft authentication encrypted-password "$5$j/qC4/p5$1FmvIRtNUnhZ/GoIPzT//BWZ7dmq2utqFo..QZf5Iv2"
+set system login user nhninfra uid 2005
+set system login user nhninfra class superuser-local
+set system login user nhninfra authentication encrypted-password "$5$QL727OgA$U3c3tiXLPPeG6..PVWugU4qI45esfwwQWcHWXPe/Ak0"
+set system login user remote full-name Authenticated
+set system login user remote uid 2002
+set system login user remote class superuser-local
+set system login password format sha256
+set system login message "================================================================================\n\n             >>> pub.sp2 <<<                                    \n\n! WARNING: Authorized Access Only.\n! This system is the property of NHN .\n! UNAUTHORIZED ACCESS TO THIS DEVICE IS PROHIBITED.\n! You must have explicit permission to access or configure this device.\n! All activities performed on this device may be logged.\n! Any violations of this policy may result in disciplinary action\n! and may be reported to law enforcement. There is no right to privacy on this\n  device.\n================================================================================"
+set firewall family inet filter telnet_access term 10 from source-address 10.60.1.1/32
+set firewall family inet filter telnet_access term 10 from source-address 10.60.1.2/32
+set firewall family inet filter telnet_access term 10 from source-address 10.60.9.244/30
+set firewall family inet filter telnet_access term 10 from source-address 10.77.122.200/32
+set firewall family inet filter telnet_access term 10 from protocol tcp
+set firewall family inet filter telnet_access term 10 from destination-port ssh
+set firewall family inet filter telnet_access term 10 then accept
+set firewall family inet filter telnet_access term 20 from protocol tcp
+set firewall family inet filter telnet_access term 20 from destination-port ssh
+set firewall family inet filter telnet_access term 20 from destination-port telnet
+set firewall family inet filter telnet_access term 20 then discard
+set firewall family inet filter telnet_access term 30 from protocol tcp
+set firewall family inet filter telnet_access term 30 from destination-port ftp
+set firewall family inet filter telnet_access term 30 then discard
+set firewall family inet filter telnet_access term 40 from source-address 10.60.1.1/32
+set firewall family inet filter telnet_access term 40 from source-address 10.60.1.2/32
+set firewall family inet filter telnet_access term 40 from source-address 10.60.9.244/30
+set firewall family inet filter telnet_access term 40 from source-address 10.60.9.247/32
+set firewall family inet filter telnet_access term 40 from source-address 10.60.9.244/32
+set firewall family inet filter telnet_access term 40 from source-address 10.60.9.245/32
+set firewall family inet filter telnet_access term 40 from source-address 10.60.9.246/32
+set firewall family inet filter telnet_access term 40 from source-address 10.60.9.250/32
+set firewall family inet filter telnet_access term 40 from source-address 10.60.7.239/32
+set firewall family inet filter telnet_access term 40 from protocol udp
+set firewall family inet filter telnet_access term 40 from destination-port 161-162
+set firewall family inet filter telnet_access term 40 then accept
+set firewall family inet filter telnet_access term 50 from protocol udp
+set firewall family inet filter telnet_access term 50 from destination-port 161-162
+set firewall family inet filter telnet_access term 50 then discard
+set firewall family inet filter telnet_access term 60 from source-port finger
+set firewall family inet filter telnet_access term 60 then discard
+set firewall family inet filter telnet_access term 70 from destination-port 111
+set firewall family inet filter telnet_access term 70 then discard
+set firewall family inet filter telnet_access term 100 then accept
+set system syslog file messages any info
+set system syslog file messages authorization info
+set system syslog file messages match "!(.*I-chip 4 invalid - ichip_get_handle.*|.*irb; ifl.*|.*soc_mem_read.*|.*INTERACT-6-UI.*|.*CRON-6.*)"
+set system syslog file messages explicit-priority
+set system syslog file interactive-commands interactive-commands any
+set system syslog file interactive-commands explicit-priority
+set system syslog file command interactive-commands any
+set system syslog file command archive size 512k
+set system syslog file command archive files 10
+set system syslog file command archive world-readable
+set system syslog file command explicit-priority
+set system syslog source-address 10.60.236.106
+set system syslog host 10.161.135.25 any info
+set system syslog host 10.161.135.25 authorization info
+set system syslog host 10.161.135.25 match "!(.*I-chip 4 invalid - ichip_get_handle.*|.*irb; ifl.*|.*soc_mem_read.*|.*INTERACT-6-UI.*|.*CRON-6.*)"
+set system syslog host 10.161.135.25 explicit-priority
+set interfaces em0 unit 0 family inet filter input telnet_access
+set interfaces lo0 unit 0 family inet filter input telnet_access
+set snmp community hangame`12 authorization read-only
+set snmp community hangame`12 clients 0.0.0.0/0 restrict
+set snmp community hangame`12 clients 10.60.9.247/32
+set snmp community hangame`12 clients 10.60.9.218/32
+set snmp community hangame`12 clients 10.60.9.219/32
+set snmp community hangame`12 clients 10.60.9.244/32
+set snmp community hangame`12 clients 10.60.9.245/32
+set snmp community hangame`12 clients 10.60.9.246/32
+set snmp community hangame`12 clients 10.60.9.250/32
+set snmp community hangame`12 clients 10.60.7.239/32
+set snmp community hangame`12 clients 10.60.7.240/32
+set chassis aggregated-devices ethernet device-count 50
+set chassis alarm management-ethernet link-down ignore
+set forwarding-options storm-control-profiles broad-multi_2k_pps all bandwidth-level 1000
+set forwarding-options storm-control-profiles broad-multi_2k_pps all no-unknown-unicast
+set forwarding-options storm-control-profiles default all
+set protocols lldp port-id-subtype interface-name
+set protocols lldp interface all
+set protocols lldp-med interface all
+set protocols l2-learning global-mac-table-aging-time 14400
+set policy-options policy-statement ECMP then load-balance per-packet
+set system arp aging-timer 120
+set system ddos-protection protocols arp aggregate bandwidth 2000
+set system ddos-protection protocols arp aggregate burst 3000
+set system scripts commit file denyconfig.slax
+set routing-options static route 10.60.1.1/32 next-hop 10.60.236.105
+set routing-options static route 10.60.1.2/32 next-hop 10.60.236.105
+set routing-options static route 10.161.135.25/32 next-hop 10.60.236.105
+set routing-options static route 10.60.9.218/32 next-hop 10.60.236.105
+set routing-options static route 10.60.9.219/32 next-hop 10.60.236.105
+set routing-options static route 10.60.9.244/30 next-hop 10.60.236.105
+set routing-options static route 10.77.217.0/26 next-hop 10.60.236.105
+set routing-options static route 10.77.122.200/32 next-hop 10.60.236.105
+set routing-options forwarding-table export ECMP
+set policy-options prefix-list default 0.0.0.0/0
+set interfaces xe-0/0/0 mtu 9216
+set interfaces xe-0/0/0 unit 0 family inet address 10.10.6.121/30
+set interfaces xe-0/0/1 mtu 9216
+set interfaces xe-0/0/1 unit 0 family inet address 10.10.6.125/30
+set interfaces xe-0/0/2 mtu 9216
+set interfaces xe-0/0/2 unit 0 family inet address 10.10.6.129/30
+set interfaces xe-0/0/3 mtu 9216
+set interfaces xe-0/0/3 unit 0 family inet address 10.10.6.133/30
+set interfaces et-0/0/0 mtu 11123
+set interfaces et-0/0/0 unit 0 family inet address 10.10.1.3/30
+

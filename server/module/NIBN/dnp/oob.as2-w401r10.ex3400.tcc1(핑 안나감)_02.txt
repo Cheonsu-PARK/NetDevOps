@@ -1,0 +1,12 @@
+﻿Last login: Mon Feb 13 11:52:22 2023 from 10.77.120.144
+--- JUNOS 18.4R2-S3 Kernel 64-bit  JNPR-11.0-20191223.5f5c7dc_buil
+
+{master:0}
+icraft@gw.bds1-w103r05.q5110-48s.tcc1> 
+
+{master:0}
+icraft@gw.bds1-w103r05.q5110-48s.tcc1> ssh juniperadmin@10.60.16.50 source 10.60.1.1 
+^C  
+{master:0}
+icraft@gw.bds1-w103r05.q5110-48s.tcc1> exit 
+
